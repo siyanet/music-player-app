@@ -1,14 +1,18 @@
 import styled from '@emotion/styled';
 export const PrimaryButton = styled.button`
-margin: ${props => `${props.theme.space[2]}px`};
-padding: ${props => `${props.theme.space[3]}px`};
+margin: ${props => `${props.theme.space[0]}px`};
+padding: 0px;
+// padding: ${props => `${props.theme.space[0]}px`};
 font-family: ${props => props.theme.fonts.special};
 font-size: ${props => `${props.theme.fontSizes[2]}px`};
-background-color: ${props => props.backgroundColor};
+background-color: ${props => props.backgroundColor || props.theme.colors.primary};
 border-radius: ${props => `${props.theme.radii.default}px`};
 cursor: pointer;
+width: 160px;
+text-align: left;
+
 &:hover{
-background-color:${props => props.hoverColor};
+background-color:${props => props.hoverColor || props.theme.colors.secondary};
 }
 `;
 export const SecondaryButton = styled.button`

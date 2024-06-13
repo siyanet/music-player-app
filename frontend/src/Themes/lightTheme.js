@@ -25,7 +25,7 @@ const lightTheme = {
       heading: 1.25,
     },
     radii: {
-      default: 4,
+      default: 7,
       circle: 99999,
     },
   };
