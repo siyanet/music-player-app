@@ -3,7 +3,17 @@ import { StyledHeading, StyledHeading3 } from '../StyledComponents/StyledText';
 import { StyledContainer } from '../StyledComponents/StyledContainer';
 import { PrimaryButton } from '../StyledComponents/StyledButtons';
 import { Table, TableBody, TableHead, TableHeader, TableRow ,TableCell} from '../StyledComponents/StyledTable';
+import { useDispatch, useSelector } from "react-redux";
+import { getSongsFetch } from '../Actions/SongsActions';
+import { useEffect } from 'react';
+
 function Home(){
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getSongsFetch());
+    }, [dispatch]); 
+    const songs = useSelector((state) => state.songsReducer.songs);
+
     return(
      <StyledContainer>
                 <Flex flexDirection={'row'}width = '100%'>      
@@ -30,34 +40,35 @@ function Home(){
             <Box>search</Box>
         <StyledHeading>Hi</StyledHeading>
         </Flex>
-        <Table>
-            <TableHead>
-             <TableHeader>play</TableHeader>
-             <TableHeader>img</TableHeader>
-             <TableHeader>title</TableHeader>
-             <TableHeader>musican</TableHeader>
-             <TableHeader>actions</TableHeader>
-            </TableHead>
-            <TableBody>
-                <TableRow> 
+        {songs && songs.length > 0? (
+              <Table>
+              <TableHead>
+               <TableHeader>play</TableHeader>
+               <TableHeader>img</TableHeader>
+               <TableHeader>title</TableHeader>
+               <TableHeader>musican</TableHeader>
+               <TableHeader>actions</TableHeader>
+              </TableHead>
+              <TableBody>
+          {  songs.map((song) => (
+                <TableRow key ={song.id}> 
                     <TableCell> </TableCell>
                 <TableCell> </TableCell>
+                <TableCell>{song.title} </TableCell>
                 <TableCell> </TableCell>
                 <TableCell> </TableCell>
-                <TableCell> </TableCell>
-                 </TableRow>
-               
-                <TableRow>
-                <TableCell>okay </TableCell>
-                <TableCell>okay </TableCell>
-                <TableCell>okay </TableCell>
-                <TableCell> okay</TableCell>
-                <TableCell>okay </TableCell>
-                </TableRow>
+                 </TableRow>))}
+        
                 
                 
             </TableBody>
         </Table>
+            )
+        
+        
+        
+        : (<StyledHeading3> helo</StyledHeading3>)}
+        
 
             </Flex>
       
