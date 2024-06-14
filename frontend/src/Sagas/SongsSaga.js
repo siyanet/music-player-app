@@ -2,8 +2,12 @@ import { takeEvery,call, put } from "redux-saga/effects";
 import { GET_SONGS_FETCH, getSongsFailure, getSongsSuccess } from "../Actions/SongsActions";
 
 function songsFetch(){
-    return fetch("https://jsonplaceholder.typicode.com/albums").then((response) => response.json());
-}
+    try{
+    return fetch("http://127.0.0.1:8000/api/songs/").then((response) => response.json());
+    }
+catch(e){
+    throw new Error("can't fetch data");
+}}
 
 function* workerFetchSongs(){
     try{

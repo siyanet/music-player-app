@@ -1,11 +1,11 @@
 import { Box, Flex, Heading, Text } from 'rebass';
 import { StyledHeading, StyledHeading3 } from '../StyledComponents/StyledText';
 import { StyledContainer } from '../StyledComponents/StyledContainer';
-import { PrimaryButton } from '../StyledComponents/StyledButtons';
+import { PrimaryButton, SecondaryButton } from '../StyledComponents/StyledButtons';
 import { Table, TableBody, TableHead, TableHeader, TableRow ,TableCell} from '../StyledComponents/StyledTable';
 import { useDispatch, useSelector } from "react-redux";
 import { getSongsFetch } from '../Actions/SongsActions';
-import { useEffect } from 'react';
+import { createRef, useEffect,useRef, useState } from 'react';
 
 function Home(){
     const dispatch = useDispatch();
@@ -13,6 +13,28 @@ function Home(){
         dispatch(getSongsFetch());
     }, [dispatch]); 
     const songs = useSelector((state) => state.songsReducer.songs);
+    const audioRefs = useRef({});
+    const [currentSong,setCurrentSong] = useState(null);
+const handlePlayPause = (songId) => {
+    const audioRef = audioRefs.current[songId] ? audioRefs.current[songId].current : null;
+
+    if(!audioRef) return;
+    Object.values(audioRefs.current).forEach((ref) => {
+        if (ref.current && !ref.current.paused && ref.current !== audioRef) {
+          ref.current.pause();
+        }
+      });
+   if(audioRef.paused){
+         audioRef.play();
+         setCurrentSong(songId);
+         }
+    else{
+            audioRef.pause();
+            setCurrentSong(null)
+        }
+
+
+}
 
     return(
      <StyledContainer>
@@ -50,15 +72,28 @@ function Home(){
                <TableHeader>actions</TableHeader>
               </TableHead>
               <TableBody>
-          {  songs.map((song) => (
-                <TableRow key ={song.id}> 
-                    <TableCell> </TableCell>
-                <TableCell> </TableCell>
-                <TableCell>{song.title} </TableCell>
-                <TableCell> </TableCell>
-                <TableCell> </TableCell>
-                 </TableRow>))}
-        
+            { songs.map((song) => {
+                
+                {  
+                    // Initialize audioRef for each song if not already initialized
+                    if (!audioRefs.current[song.id]) {
+                      audioRefs.current[song.id] = createRef();
+                    }
+                }
+           
+          return( <TableRow key ={song.id}> 
+            <TableCell> 
+                <SecondaryButton onClick = {()=>  handlePlayPause(song.id)}>
+                {currentSong === song.id? 'pause': 'play'} </SecondaryButton>
+            <audio ref = {audioRefs.current[song.id]} src = {song.file}/>
+            </TableCell>
+        <TableCell> </TableCell>
+        <TableCell>{song.title} </TableCell>
+        <TableCell> </TableCell>
+        <TableCell> </TableCell>
+         </TableRow>);
+            
+               })}
                 
                 
             </TableBody>
@@ -67,7 +102,7 @@ function Home(){
         
         
         
-        : (<StyledHeading3> helo</StyledHeading3>)}
+        : (<StyledHeading3> No Available Songs</StyledHeading3>)}
         
 
             </Flex>
