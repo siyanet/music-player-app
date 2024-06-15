@@ -1,11 +1,12 @@
 import { Box, Flex, Heading, Text } from 'rebass';
-import { StyledHeading, StyledHeading3 } from '../StyledComponents/StyledText';
-import { StyledContainer } from '../StyledComponents/StyledContainer';
-import { PrimaryButton, SecondaryButton } from '../StyledComponents/StyledButtons';
-import { Table, TableBody, TableHead, TableHeader, TableRow ,TableCell} from '../StyledComponents/StyledTable';
+import { StyledHeading, StyledHeading3 } from '../Components/StyledComponents/StyledText';
+import { StyledContainer } from '../Components/StyledComponents/StyledContainer';
+import { PrimaryButton, SecondaryButton } from '../Components/StyledComponents/StyledButtons';
+import { Table, TableBody, TableHead, TableHeader, TableRow ,TableCell} from '../Components/StyledComponents/StyledTable';
 import { useDispatch, useSelector } from "react-redux";
 import { getSongsFetch } from '../Actions/SongsActions';
 import { createRef, useEffect,useRef, useState } from 'react';
+import EditForm from '../Components/EditForm';
 
 function Home(){
     const dispatch = useDispatch();
@@ -15,6 +16,20 @@ function Home(){
     const songs = useSelector((state) => state.songsReducer.songs);
     const audioRefs = useRef({});
     const [currentSong,setCurrentSong] = useState(null);
+    const [showEditForm,setShowEditForm] = useState(false);
+    const [selectedSong,setSelectedSong] = useState(null);
+    const closeEditForm = () =>{
+        setShowEditForm(false);
+        setSelectedSong(null);
+    }
+    const openEditForm = (song) =>{
+        setShowEditForm(true);
+        setSelectedSong(song)
+        
+    }
+
+
+
 const handlePlayPause = (songId) => {
     const audioRef = audioRefs.current[songId] ? audioRefs.current[songId].current : null;
 
@@ -61,7 +76,8 @@ const handlePlayPause = (songId) => {
         <Flex flexDirection={'row'} justifyContent={'space-between'} width={'100%'}>
             <Box>search</Box>
         <StyledHeading>Hi</StyledHeading>
-        </Flex>
+        </Flex>/
+   
         {songs && songs.length > 0? (
               <Table>
               <TableHead>
@@ -73,7 +89,9 @@ const handlePlayPause = (songId) => {
               </TableHead>
               <TableBody>
             { songs.map((song) => {
-                
+                    // <EditForm onClose={closeEditForm} songId ={ song.id}></EditForm>
+                // <EditForm onClose = {closeEditForm} songId = {song.id}></EditForm>
+               
                 {  
                     // Initialize audioRef for each song if not already initialized
                     if (!audioRefs.current[song.id]) {
@@ -90,7 +108,7 @@ const handlePlayPause = (songId) => {
         <TableCell> </TableCell>
         <TableCell>{song.title} </TableCell>
         <TableCell> </TableCell>
-        <TableCell> </TableCell>
+        <TableCell> <SecondaryButton onClick={() => openEditForm(song)}>edit</SecondaryButton><SecondaryButton>Delete</SecondaryButton></TableCell>
          </TableRow>);
             
                })}
@@ -103,6 +121,7 @@ const handlePlayPause = (songId) => {
         
         
         : (<StyledHeading3> No Available Songs</StyledHeading3>)}
+        {showEditForm && selectedSong && <EditForm  song = {selectedSong} onClose = {closeEditForm}/>}
         
 
             </Flex>
