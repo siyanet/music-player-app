@@ -4,7 +4,7 @@ import { StyledContainer } from '../Components/StyledComponents/StyledContainer'
 import { PrimaryButton, SecondaryButton } from '../Components/StyledComponents/StyledButtons';
 import { Table, TableBody, TableHead, TableHeader, TableRow ,TableCell} from '../Components/StyledComponents/StyledTable';
 import { useDispatch, useSelector } from "react-redux";
-import { getSongsFetch } from '../Actions/SongsActions';
+import { getSongsFetch } from '../Actions/GetSongsActions';
 import { createRef, useEffect,useRef, useState } from 'react';
 import EditForm from '../Components/EditForm';
 

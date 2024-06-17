@@ -1,15 +1,19 @@
 import { hasFormSubmit } from "@testing-library/user-event/dist/utils";
 import { useState } from "react"
+import { useDispatch } from "react-redux";
 import { Box ,  Flex} from "rebass";
+import { updateSong } from "../Actions/UpdateSongsActions";
 
 function EditForm({song,onClose}) {
     const [title,setTitle] = useState(song.title);
     const [artist,setArtist] = useState(song.artist);
     const [titleError,setTitleError] = useState('');
     const [artistError,setArtistError] = useState('');
+    const dispatch = useDispatch();
     const handleSubmit = (e) =>{
         e.preventDefault();
-        if(titleError == '' && artistError == ''){
+        if(titleError != '' && artistError != ''){
+            dispatch(updateSong(song.id,{title,artist}));
         onClose();}
 }
 const handleTitleValidation = (e) =>{
