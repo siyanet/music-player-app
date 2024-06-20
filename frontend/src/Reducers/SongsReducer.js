@@ -1,4 +1,4 @@
-import { GET_SONGS_FAILURE, GET_SONGS_SUCCESS } from "../Actions/SongsActions";
+import { GET_SONGS_FAILURE, GET_SONGS_SUCCESS } from "../Actions/GetSongsActions";
 const initialState = {
     songs: [],
     error: null,

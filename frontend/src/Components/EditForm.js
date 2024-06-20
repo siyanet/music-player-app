@@ -1,8 +1,8 @@
 import { hasFormSubmit } from "@testing-library/user-event/dist/utils";
-import { useState } from "react"
-import { useDispatch } from "react-redux";
+import { useState,useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux";
 import { Box ,  Flex} from "rebass";
-import { updateSong } from "../Actions/UpdateSongsActions";
+import { updateSongRequest} from "../Actions/UpdateSongsActions";
 
 function EditForm({song,onClose}) {
     const [title,setTitle] = useState(song.title);
@@ -10,12 +10,23 @@ function EditForm({song,onClose}) {
     const [titleError,setTitleError] = useState('');
     const [artistError,setArtistError] = useState('');
     const dispatch = useDispatch();
+    const updateError = useSelector((state) => state.updateSongsReducer.error);
+    const updateLoading = useSelector((state) => state.updateSongsReducer.loading);
+    const updateSuccess = useSelector((state) => state.updateSongsReducer.success);
+    const [updated,setUpdated] = useState(null);
     const handleSubmit = (e) =>{
         e.preventDefault();
-        if(titleError != '' && artistError != ''){
-            dispatch(updateSong(song.id,{title,artist}));
-        onClose();}
+        dispatch(updateSongRequest({songId: song.id,updatedTitle: title,updatedArtist : artist}));
+        setUpdated(true);
+     
+       
 }
+useEffect(() => {
+    if (updateSuccess && updated) {
+        onClose();
+        setUpdated(false);
+    }
+}, [updateSuccess])
 const handleTitleValidation = (e) =>{
     setTitle(e.target.value);
    if(/^[a-zA-Z\s]*$/.test(e.target.value)){
@@ -57,7 +68,8 @@ return(
         {artistError && <span>{artistError}</span>}
         <Flex justifyContent={'space-between'} m = {'4px'}>   <button mt={3} onClick={(e) => handleSubmit(e)}>Update</button>
         <button mt={2} onClick = {onClose}>Cancel</button></Flex>
-      
+        {updateError && <Box>{updateError}</Box>}
+        {updateLoading && <Box>updateLoading</Box>}
       
 
         </Flex>

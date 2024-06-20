@@ -1,16 +1,16 @@
-export const Update_SONG_SUCCESS = 'Update_SONG_SUCCESS';
-export const Update_SONG_FAILURE = 'Update_SONG_FAILURE';
-export const Update_SONG = 'Update_SONG_FETCH';
+export const UPDATE_SONG_SUCCESS = 'UPDATE_SONG_SUCCESS';
+export const UPDATE_SONG_FAILURE = 'UPDATE_SONG_FAILURE';
+export const UPDATE_SONG_REQUEST = 'UPDATE_SONG_REQUEST';
 
 export const updateSongSuccess = (song) => ({
-    type: Update_SONG_SUCCESS,
+    type: UPDATE_SONG_SUCCESS,
     payload: song
 });
-export const updateSong = (songId,updateData) => ({
-    type: Update_SONG,
-    payload: {songId,updateData},
+export const updateSongRequest = (payload) => ({
+    type: UPDATE_SONG_REQUEST,
+    payload: {payload},
 });
-export const UpdateSongFailure = (error) => ({
-    type: Update_SONG_FAILURE,
+export const updateSongFailure = (error) => ({
+    type: UPDATE_SONG_FAILURE,
     payload: error,
 });

@@ -1,5 +1,5 @@
 import { takeEvery,call, put } from "redux-saga/effects";
-import { GET_SONGS_FETCH, getSongsFailure, getSongsSuccess } from "../Actions/SongsActions";
+import { GET_SONGS_FETCH, getSongsFailure, getSongsSuccess } from "../Actions/GetSongsActions";
 
 function songsFetch(){
     try{

@@ -7,17 +7,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSongsFetch } from '../Actions/GetSongsActions';
 import { createRef, useEffect,useRef, useState } from 'react';
 import EditForm from '../Components/EditForm';
+import { Navigate, useNavigate } from 'react-router-dom';
+import DeleteAlert from '../Components/DeleteAlert';
 
 function Home(){
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(getSongsFetch());
-    }, [dispatch]); 
+  
     const songs = useSelector((state) => state.songsReducer.songs);
     const audioRefs = useRef({});
     const [currentSong,setCurrentSong] = useState(null);
     const [showEditForm,setShowEditForm] = useState(false);
     const [selectedSong,setSelectedSong] = useState(null);
+    const [showDeleteAlert,setShowDeleteAlert] = useState(false);
+    const [navigateToUpload,setNavigateToUpload] = useState(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    useEffect(() => {
+        dispatch(getSongsFetch());
+    }, [dispatch]); 
+    if(navigateToUpload === true){
+       navigate('/upload');
+    }
     const closeEditForm = () =>{
         setShowEditForm(false);
         setSelectedSong(null);
@@ -27,6 +36,16 @@ function Home(){
         setSelectedSong(song)
         
     }
+    const closeDeleteAlert = () =>{
+        setShowDeleteAlert(false);
+        setSelectedSong(null);
+    }
+    const openDeleteAlert = (song) =>{
+        setShowDeleteAlert(true);
+        setSelectedSong(song)
+        
+    }
+
 
 
 
@@ -64,7 +83,7 @@ const handlePlayPause = (songId) => {
                     <StyledHeading3>Home</StyledHeading3>
                 </PrimaryButton>
             <PrimaryButton backgroundColor="#006100" hoverColor="#059e08"> <StyledHeading3>Favourites</StyledHeading3></PrimaryButton>
-            <PrimaryButton backgroundColor="#006100" hoverColor="#059e08"> <StyledHeading3>Upload</StyledHeading3></PrimaryButton> 
+            <PrimaryButton backgroundColor="#006100" hoverColor="#059e08"> <StyledHeading3 onClick={() => setNavigateToUpload(true)}>Upload</StyledHeading3></PrimaryButton> 
               
               </Box>
               <Box  ><PrimaryButton><StyledHeading>LogOut</StyledHeading></PrimaryButton></Box>
@@ -108,7 +127,8 @@ const handlePlayPause = (songId) => {
         <TableCell> </TableCell>
         <TableCell>{song.title} </TableCell>
         <TableCell> </TableCell>
-        <TableCell> <SecondaryButton onClick={() => openEditForm(song)}>edit</SecondaryButton><SecondaryButton>Delete</SecondaryButton></TableCell>
+        <TableCell> <SecondaryButton onClick={() => openEditForm(song)}>edit</SecondaryButton>
+        <SecondaryButton onClick={() => openDeleteAlert(song)}>Delete</SecondaryButton></TableCell>
          </TableRow>);
             
                })}
@@ -122,8 +142,8 @@ const handlePlayPause = (songId) => {
         
         : (<StyledHeading3> No Available Songs</StyledHeading3>)}
         {showEditForm && selectedSong && <EditForm  song = {selectedSong} onClose = {closeEditForm}/>}
-        
-
+      
+        {showDeleteAlert && selectedSong && <DeleteAlert song = {selectedSong} onClose = {closeDeleteAlert}/>}
             </Flex>
       
         </Box>
