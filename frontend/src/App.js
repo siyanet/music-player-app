@@ -8,11 +8,14 @@ import ProtectedRoute from "./Components/ProtectedRoute";
 function App() {
   return (
       <Routes>
-        <ProtectedRoute>   
-            <Route path="/" element={<Home/>} />
-            </ProtectedRoute>
+        
+            <Route path="/" element={
+              <ProtectedRoute>  <Home /></ProtectedRoute>
+            
+            } />
+          
  
-      <Route path="/upload" element={<Upload/>} />
+      <Route path="/upload" element={<ProtectedRoute><Upload/></ProtectedRoute> }/>
       <Route path='/login' element={<Login/>}/>
 
       </Routes>

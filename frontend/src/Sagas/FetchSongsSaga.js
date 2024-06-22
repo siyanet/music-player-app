@@ -1,9 +1,9 @@
 import { takeEvery,call, put } from "redux-saga/effects";
 import { GET_SONGS_FETCH, getSongsFailure, getSongsSuccess } from "../Actions/GetSongsActions";
-
+import axiosInstance from "../Components/AxiosInstance";
 function songsFetch(){
     try{
-    return fetch("http://127.0.0.1:8000/api/songs/").then((response) => response.json());
+        return axiosInstance.get("/songs/");
     }
 catch(e){
     throw new Error("can't fetch data");
@@ -11,7 +11,8 @@ catch(e){
 
 function* workerFetchSongs(){
     try{
-        const songs = yield call(songsFetch);
+        const response = yield call(songsFetch);
+        const songs = response.data;
         yield put(getSongsSuccess(songs));
     }
     catch(e){

@@ -1,20 +1,11 @@
 import { takeLatest,put,call } from "redux-saga/effects";
 import { CREATE_SONG_REQUEST, createSongFailure, createSongSuccess } from "../Actions/CreateSongsActions";
+import axiosInstance from "../Components/AxiosInstance";
 
 
 function createSong(data){
+    return axiosInstance.post('/songs/', data);
     
-    return fetch(`http://127.0.0.1:8000/api/songs/`,{
-        method: 'POST',
-        body: data
- } ).then((response) => {
-    if (!response.ok) {
-        return response.json().then(errorData => {
-            throw new Error(errorData.detail || 'Something went wrong');
-        });
-    }
-    
-   return  response.json()});
 
 
 }

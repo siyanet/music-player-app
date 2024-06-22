@@ -1,17 +1,18 @@
 import { Navigate } from "react-router-dom";
-import jwtDecode from "jwt-decode";
-import { REFRESH_TOKEN, ACCESS_TOKEN } from "../constants";
+import {jwtDecode} from 'jwt-decode';
+
 import { useState, useEffect } from "react";
 
 function ProtectedRoute({ children }) {
     const [isAuthorized, setIsAuthorized] = useState(null);
 
     useEffect(() => {
-        auth().catch(() => setIsAuthorized(false));
+        auth().catch(() => {setIsAuthorized(false); 
+        console.log('have auth error')});
     }, []);
 
     const refreshToken = async () => {
-        const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+        const refreshToken = localStorage.getItem('refreshToken');
         try {
             const response = await fetch('http://127.0.0.1:8000/api/token/refresh', {
                 method: 'POST',
@@ -27,7 +28,7 @@ function ProtectedRoute({ children }) {
             }
 
             const data = await response.json();
-            localStorage.setItem(ACCESS_TOKEN, data.access); // Set the new access token
+            localStorage.setItem('accessToken', data.access); // Set the new access token
             setIsAuthorized(true);
         } catch (error) {
             console.log(error);
@@ -36,8 +37,9 @@ function ProtectedRoute({ children }) {
     };
 
     const auth = async () => {
-        const token = localStorage.getItem(ACCESS_TOKEN);
+        const token = localStorage.getItem('accessToken');
         if (!token) {
+            console.log('have no accessToken');
             setIsAuthorized(false);
             return;
         }

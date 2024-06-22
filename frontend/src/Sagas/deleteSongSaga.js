@@ -1,20 +1,9 @@
 import { takeLatest,call,put } from "redux-saga/effects";
 import { DELETE_SONG_REQUEST, deleteSongFailure, deleteSongRequest, deleteSongSuccess } from "../Actions/deleteSongAction";
-
+import axiosInstance from "../Components/AxiosInstance";
 
 function deleteSong(songId){
-    return fetch(`http://127.0.0.1:8000/api/songDelete/${songId}/`, {
-        method: 'DELETE',
- } ).then(response => {
-    if(!response.ok){
-        return response.json().then(errorData =>{
-            throw new Error(errorData.message || errorData.detail || "failed to delete the song");
-        });
-     } 
-     return response.json();
-    
-    }
- )
+    return axiosInstance.delete(`/songDelete/${songId}/`);
 
 }
 function* deleteSongWorker(action){
