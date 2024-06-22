@@ -3,6 +3,7 @@ import songsSaga from './FetchSongsSaga';
 import { updateSongSaga } from './UpdateSongSaga';
 import createSongSaga from './CreateSongSaga';
 import deleteSongSaga from './deleteSongSaga';
+import registerSaga from './UserRegisterSaga';
 
 
 export default function* rootSaga() {
@@ -11,6 +12,7 @@ export default function* rootSaga() {
      updateSongSaga(),
      createSongSaga(),
      deleteSongSaga(),
+     registerSaga(),
       // Add other sagas here
     ]);
   }

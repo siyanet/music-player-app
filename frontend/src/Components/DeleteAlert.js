@@ -17,7 +17,7 @@ function handleDelete(e){
 
 }
 useEffect(() => {
-    if (deleteSongSuccess && deleted) {
+    if (deleteSongSuccess) {
         onClose();
         setDeleted(false);
     }

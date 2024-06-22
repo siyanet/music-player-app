@@ -19,6 +19,7 @@ function Home(){
     const [selectedSong,setSelectedSong] = useState(null);
     const [showDeleteAlert,setShowDeleteAlert] = useState(false);
     const [navigateToUpload,setNavigateToUpload] = useState(false);
+    const [navigateToLogin,setNavigateToLogin] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
@@ -26,6 +27,9 @@ function Home(){
     }, [dispatch]); 
     if(navigateToUpload === true){
        navigate('/upload');
+    }
+    if(navigateToLogin === true){
+        navigate('/login');
     }
     const closeEditForm = () =>{
         setShowEditForm(false);
@@ -86,7 +90,7 @@ const handlePlayPause = (songId) => {
             <PrimaryButton backgroundColor="#006100" hoverColor="#059e08"> <StyledHeading3 onClick={() => setNavigateToUpload(true)}>Upload</StyledHeading3></PrimaryButton> 
               
               </Box>
-              <Box  ><PrimaryButton><StyledHeading>LogOut</StyledHeading></PrimaryButton></Box>
+              <Box  ><PrimaryButton onClick = {() => setNavigateToLogin(true)}><StyledHeading>LogIn</StyledHeading></PrimaryButton></Box>
             </Flex>
         </Box>
         <Box width={3/4}>
