@@ -4,6 +4,7 @@ import { updateSongSaga } from './UpdateSongSaga';
 import createSongSaga from './CreateSongSaga';
 import deleteSongSaga from './deleteSongSaga';
 import registerSaga from './UserRegisterSaga';
+import loginSaga from './LoginSaga';
 
 
 export default function* rootSaga() {
@@ -13,6 +14,7 @@ export default function* rootSaga() {
      createSongSaga(),
      deleteSongSaga(),
      registerSaga(),
+     loginSaga(),
       // Add other sagas here
     ]);
   }

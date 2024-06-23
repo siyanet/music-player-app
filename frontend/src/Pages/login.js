@@ -1,9 +1,10 @@
 // Login.js
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { userRegisterRequest } from '../Actions/UsersRegiserAction';
+import { userRegisterRequest } from '../Actions/RegiserAction';
 import { useNavigate } from 'react-router-dom';
 import { PrimaryButton, SecondaryButton } from '../Components/StyledComponents/StyledButtons';
+import { loginRequest } from '../Actions/LoginAction';
 
 
 const Login = () => {
@@ -15,9 +16,14 @@ const Login = () => {
   const [method,setMethod]  = useState("login");
   const [userNameInputError,setUserNameInputError] = useState(null);
   const [passwordInputError,setPasswordInputError] = useState(null);
-  const error = useSelector((state) => state.userRegisterReducer.error);
-  const success = useSelector((state) => state.userRegisterReducer.success);
-  const [registered,setRegistered] = useState(false);
+  const registerError = useSelector((state) => state.userRegisterReducer.error);
+  const registerSuccess = useSelector((state) => state.userRegisterReducer.success);
+  const loginSuccess = useSelector((state) => state.loginReducer.success);
+  const loginError = useSelector((state) => state.loginReducer.error);
+
+//   const [success,setSuccess] = useState(false);
+//   const [logedIn,setLogedin] = useState(false);
+//   const [registered,setRegistered] = useState(false);
 
 
 const validateUserName = (e) =>{
@@ -44,26 +50,42 @@ const changeMethod = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(method === 'register'){
+        dispatch(userRegisterRequest(username,password));
+        // setRegistered(true);
+    }
+    else if(method === 'login'){
+        dispatch(loginRequest(username,password));
+        
+        // setLogedin(true);
+    }
    
-    dispatch(userRegisterRequest(username,password,method));
-    if (method === 'register' && success) {
-        setRegistered(true); // Set registered to true upon successful registration
-        setUsername('');
-        setPassword('');
-        setMethod('login');
-    }
-    if (method === 'login' && success && registered) {
-        navigate('/');
-    }
+ 
    
 
    
   };
+  useEffect(() =>{
+    if (method === 'login' && loginSuccess ) {
+
+        navigate('/');
+    }
+     
+    else if (method === 'register' && registerSuccess) {
+        // Set registered to true upon successful registration
+       setUsername('');
+       setPassword('');
+       setMethod('login');
+   }
+
+
+  },[loginSuccess,registerSuccess,method,navigate]);
 
 
   return (
     <div>
-            {error && <p>{error}</p>}
+            {loginError && <p>{loginError}</p>}
+            {registerError && <p>{registerError}</p>}
       <form onSubmit={handleSubmit}>
         <label>
           Username:

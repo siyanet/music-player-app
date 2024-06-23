@@ -7,7 +7,7 @@ export const userRegisterSuccess = () => ({
 });
 export const userRegisterRequest = (username,password,method) => ({
     type : 'USER_REGISTER_REQUEST',
-    payload: {username,password,method}
+    payload: {username,password}
 });
 export const userRegisterError = (error) =>({
     type: 'USER_REGISTER_ERROR',

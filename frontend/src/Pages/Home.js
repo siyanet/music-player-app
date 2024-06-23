@@ -9,6 +9,8 @@ import { createRef, useEffect,useRef, useState } from 'react';
 import EditForm from '../Components/EditForm';
 import { Navigate, useNavigate } from 'react-router-dom';
 import DeleteAlert from '../Components/DeleteAlert';
+import { logoutRequest, logoutStateClear } from '../Actions/LogoutAction';
+import { clearLoginState } from '../Actions/LoginAction';
 
 function Home(){
   
@@ -20,6 +22,10 @@ function Home(){
     const [showDeleteAlert,setShowDeleteAlert] = useState(false);
     const [navigateToUpload,setNavigateToUpload] = useState(false);
     const [navigateToLogin,setNavigateToLogin] = useState(false);
+    const loggedOut = useSelector((state) => state.logoutReducer.loggedOut);
+    // const loginSuccess = useSelector((state) => state.loginReducer.success);
+    const loginSuccess = useSelector((state) => state.loginReducer.success);
+    
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
@@ -48,8 +54,17 @@ function Home(){
         setShowDeleteAlert(true);
         setSelectedSong(song)
         
+
     }
 
+const logOut = () =>{
+    dispatch(logoutRequest());
+    dispatch(clearLoginState());
+}
+const logIn = () =>{
+    dispatch(logoutStateClear());
+    navigate('/login');
+}
 
 
 
@@ -79,18 +94,20 @@ const handlePlayPause = (songId) => {
                 <Flex flexDirection={'row'}width = '100%'>      
             <Box width={1/4} >
                 <Flex flexDirection={'column'} width={'100%'}  justifyContent={'space-between'}>
-                    <Box >
+                 
                 <StyledHeading> My</StyledHeading>
                 <StyledHeading>Music</StyledHeading>
                
                 <PrimaryButton backgroundColor="#006100" hoverColor="#059e08">
                     <StyledHeading3>Home</StyledHeading3>
                 </PrimaryButton>
-            <PrimaryButton backgroundColor="#006100" hoverColor="#059e08"> <StyledHeading3>Favourites</StyledHeading3></PrimaryButton>
+          
             <PrimaryButton backgroundColor="#006100" hoverColor="#059e08"> <StyledHeading3 onClick={() => setNavigateToUpload(true)}>Upload</StyledHeading3></PrimaryButton> 
               
-              </Box>
-              <Box  ><PrimaryButton onClick = {() => setNavigateToLogin(true)}><StyledHeading>LogIn</StyledHeading></PrimaryButton></Box>
+            
+              {loggedOut &&  <Box  ><PrimaryButton onClick = {logIn}><StyledHeading>LogIn</StyledHeading></PrimaryButton></Box>}
+             {/* {loginSuccess &&  <Box  ><PrimaryButton onClick = {logOut()}><StyledHeading>LogOut</StyledHeading></PrimaryButton></Box>} */}
+             {loginSuccess && <Box><PrimaryButton onClick={logOut}><StyledHeading>LogOut</StyledHeading></PrimaryButton></Box>}
             </Flex>
         </Box>
         <Box width={3/4}>

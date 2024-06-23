@@ -1,4 +1,5 @@
-import { USER_REGISTER_ERROR, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS } from "../Actions/RegiserAction";
+import { LOGIN_CLEAR, LOGIN_ERROR, LOGIN_REQUEST, LOGIN_SUCCESS } from "../Actions/LoginAction";
+
 
 const initialState = {
     error: null,
@@ -6,28 +7,35 @@ const initialState = {
     success: null,
 };
 
-export const userRegisterReducer = (state = initialState,action) =>{
+export const loginReducer = (state = initialState,action) =>{
     switch(action.type){
-        case USER_REGISTER_REQUEST:
+        case LOGIN_REQUEST:
             return{
                 ...state,
                 error: null,
                 loading: true,
                 success: null,
             };
-        case USER_REGISTER_SUCCESS:
+        case LOGIN_SUCCESS:
             return{
                 ...state,
                 error: null,
                 loading: false,
                 success: true
             };
-        case USER_REGISTER_ERROR:
+        case LOGIN_ERROR:
             return{
                 ...state,
                 error: action.payload.error,
                 loading: false,
                 success: false,
+            };
+        case LOGIN_CLEAR:
+            return{
+                ...state,
+                error:null,
+                loading: false,
+                success: null,
             };
             default:
                 return state;

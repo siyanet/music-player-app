@@ -1,5 +1,5 @@
 import { takeEvery,put,call } from "redux-saga/effects";
-import { USER_REGISTER_REQUEST, userRegisterError, userRegisterSuccess } from "../Actions/UsersRegiserAction";
+import { USER_REGISTER_REQUEST, userRegisterError, userRegisterSuccess } from "../Actions/RegiserAction";
 
 function register(formData, api) {
     return fetch(api, {
@@ -16,29 +16,16 @@ function register(formData, api) {
 }
 
 function* registerWorker (action) {
-    const {username,password,method}= action.payload;
+    const {username,password}= action.payload;
     try{
         const formData = new FormData();
         formData.append('username',username);
         formData.append('password',password);
-        if(method === 'login'){
-            console.log("login");
-           const  api = "http://127.0.0.1:8000/api/token/access";
-           const tokens = yield call(register,formData,api);
-           const { access, refresh } = tokens;
-           console.log('tokens', tokens); // Log the entire tokens object
-           console.log('access', access);
-           console.log('refresh', refresh);
-           localStorage.clear();
-           localStorage.setItem('accessToken', access);
-           localStorage.setItem('refreshToken', refresh);
-
-
-        }
-        else{
+       
+        
            const  api = "http://127.0.0.1:8000/api/register";
            yield call(register,formData,api);
-        }
+        
         yield put(userRegisterSuccess());
     }
     catch(e){

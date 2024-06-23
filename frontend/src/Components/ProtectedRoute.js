@@ -2,9 +2,12 @@ import { Navigate } from "react-router-dom";
 import {jwtDecode} from 'jwt-decode';
 
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../Actions/LoginAction";
 
 function ProtectedRoute({ children }) {
     const [isAuthorized, setIsAuthorized] = useState(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         auth().catch(() => {setIsAuthorized(false); 
@@ -28,8 +31,11 @@ function ProtectedRoute({ children }) {
             }
 
             const data = await response.json();
-            localStorage.setItem('accessToken', data.access); // Set the new access token
+            localStorage.setItem('accessToken', data.access); 
+            dispatch(loginSuccess()); // Set the new access token
             setIsAuthorized(true);
+           
+            
         } catch (error) {
             console.log(error);
             setIsAuthorized(false);
@@ -52,7 +58,9 @@ function ProtectedRoute({ children }) {
             if (tokenExpiration < now) {
                 await refreshToken();
             } else {
+                dispatch(loginSuccess());
                 setIsAuthorized(true);
+               
             }
         } catch (error) {
             console.log(error);
