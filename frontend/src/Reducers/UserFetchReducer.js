@@ -1,9 +1,5 @@
 
-import {
-    UPDATE_SONG_SUCCESS,
-    UPDATE_SONG_FAILURE,
-    UPDATE_SONG_REQUEST,
-  } from '../Actions/UpdateSongsActions';
+import { USER_FETCH_FAILURE,USER_FETCH_REQUEST,USER_FETCH_SUCCESS, USER_STATE_CLEAR } from '../Actions/UserAction';
   
   const initialState = {
     success: null,
@@ -11,33 +7,39 @@ import {
     loading: false,
   };
   
-  const updateSongsReducer = (state = initialState, action) => {
+  const userFetchReducer = (state = initialState, action) => {
     switch (action.type) {
-      case UPDATE_SONG_REQUEST:
+      case USER_FETCH_REQUEST:
         return {
           ...state,
           loading: true,
           error: null,
           success: null,
         };
-      case UPDATE_SONG_SUCCESS:
+      case USER_FETCH_SUCCESS:
         return {
           ...state,
           loading: false,
           error: null,
-          success: true,
+          success: action.payload,
         };
-      case UPDATE_SONG_FAILURE:
+      case USER_FETCH_FAILURE:
         return {
           ...state,
           loading: false,
           error: action.payload.error,
           success: null
         };
+     case USER_STATE_CLEAR:
+        return{
+            ...state,
+            loading: false,
+            error: null,
+            success:null
+        }
       default:
         return state;
     }
   };
   
-  export default updateSongsReducer;
-  
+  export default userFetchReducer;

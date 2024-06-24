@@ -6,6 +6,8 @@ import { deleteSongReducer } from './deleteSongReducer';
 import { userRegisterReducer } from './userRegisterReducer';
 import { loginReducer } from './loginReducer';
 import logoutReducer from './LogoutReducer';
+import userFetchReducer from './UserFetchReducer';
+import defaultSongsReducer from './defaultSongReducer';
 
 export const rootReducer = combineReducers({
     songsReducer: songsReducer,
@@ -15,4 +17,6 @@ export const rootReducer = combineReducers({
     userRegisterReducer: userRegisterReducer,
     loginReducer: loginReducer,
     logoutReducer: logoutReducer,
+    userFetchReducer: userFetchReducer,
+    defaultSongsReducer: defaultSongsReducer,
 })

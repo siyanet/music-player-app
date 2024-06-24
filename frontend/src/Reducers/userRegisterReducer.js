@@ -27,7 +27,7 @@ export const userRegisterReducer = (state = initialState,action) =>{
                 ...state,
                 error: action.payload.error,
                 loading: false,
-                success: false,
+                success: null,
             };
             default:
                 return state;

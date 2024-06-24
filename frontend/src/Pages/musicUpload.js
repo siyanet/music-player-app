@@ -34,6 +34,13 @@ function Upload(){
        setCreated(true);
         
     }
+    const handleUpdateCancel = (e) =>{
+        e.preventDefault();
+        setTitle('');
+        setArtist('');
+        setFile('');
+        navigate('/');
+    }
  useEffect(() =>{
     if(createSuccess && created){
     navigate('/');
@@ -50,7 +57,11 @@ function Upload(){
                 <input value = {artist}  onChange = {(e) => setArtist(e.target.value)} type='text' name = 'artist'/>
                 <label htmlFor="file"> File Upload</label>
                 <input  onChange ={(e) => handleFileChange(e)}type = 'file' name = 'file'/>
-                <PrimaryButton onClick={(e)=>handleUpload(e)}>upload</PrimaryButton>
+                <flex flexDirection= 'row'> 
+                    <PrimaryButton onClick={(e)=>handleUpload(e)}>upload</PrimaryButton>
+                    <PrimaryButton onClick = {(e)=>handleUpdateCancel(e)}>cancel</PrimaryButton>
+                </flex>
+               
                 {createError && <Box>{createError}</Box>}
             </Flex>
            

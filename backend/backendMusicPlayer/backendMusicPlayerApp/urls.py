@@ -1,5 +1,5 @@
 from django.urls import path,include
-from .views import SongListView,SongUpdateView,SongDeleteView,UserCreateView
+from .views import SongListView,SongUpdateView,SongDeleteView,UserCreateView,UserDetailView,DefaultSongView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -13,4 +13,6 @@ urlpatterns = [
     path('songs/', SongListView.as_view(), name='song-list'),
     path('songUpdate/<int:pk>/',SongUpdateView.as_view(),name ='song-update'),
     path('songDelete/<int:pk>/',SongDeleteView.as_view(),name = 'song-delete'),
+    path('user',UserDetailView.as_view(),name= 'user-detail'),
+    path('defaultsong',DefaultSongView.as_view(),name = 'default-song')
 ]

@@ -4,6 +4,7 @@ import {jwtDecode} from 'jwt-decode';
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../Actions/LoginAction";
+import { userFetchRequest } from "../Actions/UserAction";
 
 function ProtectedRoute({ children }) {
     const [isAuthorized, setIsAuthorized] = useState(null);
@@ -32,7 +33,8 @@ function ProtectedRoute({ children }) {
 
             const data = await response.json();
             localStorage.setItem('accessToken', data.access); 
-            dispatch(loginSuccess()); // Set the new access token
+            dispatch(loginSuccess());
+            dispatch(userFetchRequest()); // Set the new access token
             setIsAuthorized(true);
            
             
@@ -59,6 +61,7 @@ function ProtectedRoute({ children }) {
                 await refreshToken();
             } else {
                 dispatch(loginSuccess());
+                dispatch(userFetchRequest());
                 setIsAuthorized(true);
                
             }

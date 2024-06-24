@@ -5,6 +5,8 @@ import createSongSaga from './CreateSongSaga';
 import deleteSongSaga from './deleteSongSaga';
 import registerSaga from './UserRegisterSaga';
 import loginSaga from './LoginSaga';
+import userSaga from './userFetchSaga';
+import defaultSongSaga from './DefaultSongsSaga';
 
 
 export default function* rootSaga() {
@@ -15,6 +17,8 @@ export default function* rootSaga() {
      deleteSongSaga(),
      registerSaga(),
      loginSaga(),
+     userSaga(),
+     defaultSongSaga(),
       // Add other sagas here
     ]);
   }

@@ -11,10 +11,14 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import DeleteAlert from '../Components/DeleteAlert';
 import { logoutRequest, logoutStateClear } from '../Actions/LogoutAction';
 import { clearLoginState } from '../Actions/LoginAction';
+import { userStateClear } from '../Actions/UserAction';
+import { getDefaultSongsFetch } from '../Actions/DefaultSongAction';
+
 
 function Home(){
   
     const songs = useSelector((state) => state.songsReducer.songs);
+    const defaultSongs = useSelector((state) => state.defaultSongsReducer.songs);
     const audioRefs = useRef({});
     const [currentSong,setCurrentSong] = useState(null);
     const [showEditForm,setShowEditForm] = useState(false);
@@ -25,11 +29,13 @@ function Home(){
     const loggedOut = useSelector((state) => state.logoutReducer.loggedOut);
     // const loginSuccess = useSelector((state) => state.loginReducer.success);
     const loginSuccess = useSelector((state) => state.loginReducer.success);
+    const user = useSelector((state) => state.userFetchReducer.success);
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
         dispatch(getSongsFetch());
+        dispatch(getDefaultSongsFetch());
     }, [dispatch]); 
     if(navigateToUpload === true){
        navigate('/upload');
@@ -40,6 +46,7 @@ function Home(){
     const closeEditForm = () =>{
         setShowEditForm(false);
         setSelectedSong(null);
+        dispatch(getSongsFetch());
     }
     const openEditForm = (song) =>{
         setShowEditForm(true);
@@ -49,6 +56,7 @@ function Home(){
     const closeDeleteAlert = () =>{
         setShowDeleteAlert(false);
         setSelectedSong(null);
+        dispatch(getSongsFetch());
     }
     const openDeleteAlert = (song) =>{
         setShowDeleteAlert(true);
@@ -59,6 +67,7 @@ function Home(){
 
 const logOut = () =>{
     dispatch(logoutRequest());
+    dispatch(userStateClear());
     dispatch(clearLoginState());
 }
 const logIn = () =>{
@@ -106,7 +115,7 @@ const handlePlayPause = (songId) => {
               
             
               {loggedOut &&  <Box  ><PrimaryButton onClick = {logIn}><StyledHeading>LogIn</StyledHeading></PrimaryButton></Box>}
-             {/* {loginSuccess &&  <Box  ><PrimaryButton onClick = {logOut()}><StyledHeading>LogOut</StyledHeading></PrimaryButton></Box>} */}
+             
              {loginSuccess && <Box><PrimaryButton onClick={logOut}><StyledHeading>LogOut</StyledHeading></PrimaryButton></Box>}
             </Flex>
         </Box>
@@ -115,10 +124,10 @@ const handlePlayPause = (songId) => {
                      
         <Flex flexDirection={'row'} justifyContent={'space-between'} width={'100%'}>
             <Box>search</Box>
-        <StyledHeading>Hi</StyledHeading>
+        <StyledHeading>Hi {user && user.username}</StyledHeading>
         </Flex>/
    
-        {songs && songs.length > 0? (
+        {(songs && songs.length > 0 )|| (defaultSongs && defaultSongs.length > 0)? (
               <Table>
               <TableHead>
                <TableHeader>play</TableHeader>
@@ -128,7 +137,7 @@ const handlePlayPause = (songId) => {
                <TableHeader>actions</TableHeader>
               </TableHead>
               <TableBody>
-            { songs.map((song) => {
+            { songs && songs.map((song) => {
                     // <EditForm onClose={closeEditForm} songId ={ song.id}></EditForm>
                 // <EditForm onClose = {closeEditForm} songId = {song.id}></EditForm>
                
@@ -153,6 +162,28 @@ const handlePlayPause = (songId) => {
          </TableRow>);
             
                })}
+                 {defaultSongs && defaultSongs.map((defaultSong) => {
+                                        if (!audioRefs.current[defaultSong.id]) {
+                                            audioRefs.current[defaultSong.id] = createRef();
+                                        }
+
+                                        return (
+                                            <TableRow key={defaultSong.id}>
+                                                <TableCell>
+                                                    <SecondaryButton onClick={() => handlePlayPause(defaultSong.id)}>
+                                                        {currentSong === defaultSong.id ? 'pause' : 'play'}
+                                                    </SecondaryButton>
+                                                    <audio ref={audioRefs.current[defaultSong.id]} src={defaultSong.file} />
+                                                </TableCell>
+                                                <TableCell></TableCell>
+                                                <TableCell>{defaultSong.title}</TableCell>
+                                                <TableCell></TableCell>
+                                                <TableCell>
+                                                
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
                 
                 
             </TableBody>

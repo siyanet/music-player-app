@@ -1,27 +1,19 @@
 import { takeLatest,put,call } from "redux-saga/effects";
 import { UPDATE_SONG_FAILURE,UPDATE_SONG_REQUEST, UPDATE_SONG_SUCCESS } from "../Actions/UpdateSongsActions";
+import axiosInstance from "../Components/AxiosInstance";
 
  function updateSong(songId, updatedData) {
    console.log(songId);
-    return fetch(`http://127.0.0.1:8000/api/songUpdate/${songId}/`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedData),
-    })
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(errorData => {
-                throw new Error(errorData.message || errorData.detail || 'Failed to update song');
-            });
-        }
-        return response.json();
-    })
-    .catch(e => {
-        throw new Error("can't fetch data: " + e.message);
-    });
-}
+    
+    try{
+        return axiosInstance.put(`http://127.0.0.1:8000/api/songUpdate/${songId}/`,updatedData);
+    }
+catch(e){
+    throw new Error("can't fetch data");
+}}
+
+        
+
 
 function* update(action) {
     const { payload } = action.payload;
