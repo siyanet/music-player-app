@@ -5,7 +5,7 @@ const lightTheme = {
       tertiary: '#c1e167',
       white: '#fff',
       gray: '#303030',
-      black: '#033600',
+      black: '#001a09',
       
     },
     space: [0, 4, 8, 16, 32, 64],

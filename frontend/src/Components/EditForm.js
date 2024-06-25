@@ -3,6 +3,9 @@ import { useState,useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { Box ,  Flex} from "rebass";
 import { updateSongRequest} from "../Actions/UpdateSongsActions";
+import { StyledInput } from "./StyledComponents/StyledInput";
+import { SecondaryButton } from "./StyledComponents/StyledButtons";
+import { StyledHeading, StyledHeading3 } from "./StyledComponents/StyledText";
 
 function EditForm({song,onClose}) {
     const [title,setTitle] = useState(song.title);
@@ -52,24 +55,30 @@ return(
         left: '50%',
         transform: 'translate(-50%, -50%)',
         width: '400px',
-        bg: 'white',
+        bg: '#059e08',
+    //   tertiary: '',
         p: 3,
         boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
         zIndex: 1000,
     }}>
+        <Box >
+            <Flex justifyContent={'center'} alignItems={'center'}>
+            <StyledHeading>Edit Song</StyledHeading>
+                </Flex></Box>
       
         <Flex flexDirection = {'column'}>
-        <label htmlFor="title">Title</label>
+        <label htmlFor="title"><StyledHeading3>Title</StyledHeading3></label>
       
-        <input id="title"  name="title" value={title} onChange={(e) => handleTitleValidation(e)} />
+        <StyledInput id="title"  name="title" value={title} onChange={(e) => handleTitleValidation(e)} />
         {titleError && <span>{titleError}</span>}
-        <label htmlFor="artist">Artist</label>
-        <input id="musician" name="artist" value={artist} onChange={(e) => handleArtistValidation(e)} />
+        <label htmlFor="artist"><StyledHeading3>Artist</StyledHeading3></label>
+        <StyledInput id="musician" name="artist" value={artist} onChange={(e) => handleArtistValidation(e)} />
         {artistError && <span>{artistError}</span>}
-        <Flex justifyContent={'space-between'} m = {'4px'}>   <button mt={3} onClick={(e) => handleSubmit(e)}>Update</button>
-        <button mt={2} onClick = {onClose}>Cancel</button></Flex>
+        <Flex justifyContent={'space-between'} m = {'4px'}>  
+             <SecondaryButton hoverColor = {'#c1e167'} mt={3} onClick={(e) => handleSubmit(e)}>Update</SecondaryButton>
+        <SecondaryButton hoverColor={'#cle167'} mt={2} onClick = {onClose}>Cancel</SecondaryButton></Flex>
         {updateError && <Box>{updateError}</Box>}
-        {updateLoading && <Box>updateLoading</Box>}
+       
       
 
         </Flex>
