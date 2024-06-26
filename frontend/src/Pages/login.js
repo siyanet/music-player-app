@@ -5,6 +5,11 @@ import { userRegisterRequest } from '../Actions/RegiserAction';
 import { useNavigate } from 'react-router-dom';
 import { PrimaryButton, SecondaryButton } from '../Components/StyledComponents/StyledButtons';
 import { loginRequest } from '../Actions/LoginAction';
+import { StyledContainer } from '../Components/StyledComponents/StyledContainer';
+import { StyledBox } from '../Components/StyledComponents/StyledBox';
+import { StyledHeading, StyledHeading3, StyledP } from '../Components/StyledComponents/StyledText';
+import { Box, Flex } from 'rebass';
+import { StyledInput } from '../Components/StyledComponents/StyledInput';
 
 
 const Login = () => {
@@ -83,28 +88,49 @@ const changeMethod = () => {
 
 
   return (
-    <div>
-            {loginError && <p>{loginError}</p>}
-            {registerError && <p>{registerError}</p>}
-      <form onSubmit={handleSubmit}>
+    <StyledContainer >
+      <Flex flexDirection={'column'} width={'100%'}>
+       
+
+{/* {loginError && <StyledHeading>{loginError}</StyledHeading>}
+            {registerError && <StyledHeading>{registerError}</StyledHeading>}
+             */}
+             <Box marginTop={'150px'} position="fixed" width="100%"> <Flex flexDirection={'column'} justifyContent={'center'} alignItems={'center'} ><StyledHeading>Wellcome To</StyledHeading> 
+             <StyledHeading>My Music</StyledHeading>
+             
+             </Flex></Box>
+            
+         
+            <StyledBox>
+              <form onSubmit={handleSubmit}>
+                <Flex justifyContent={'center'}><StyledHeading>{method}</StyledHeading></Flex>
         <label>
-          Username:
-          <input type="text" value={username} onChange={(e) => validateUserName(e)} required />
+          <StyledP> Username:</StyledP>
+         
+          <StyledInput type="text" value={username} onChange={(e) => validateUserName(e)} required />
         </label>
        { userNameInputError && <span>userNameInputError</span>}
         <br />
         <label>
-          Password:
-          <input type="password" value={password} onChange={(e) => validatePassword(e)} required />
+          <StyledP>Password:</StyledP>
+          
+          <StyledInput type="password" value={password} onChange={(e) => validatePassword(e)} required />
         </label>
         {passwordInputError && <span> passwordInputError</span>}
         <br />
-        <button type="submit">{method}</button>
+        <Flex justifyContent={'center'}><SecondaryButton type="submit"><StyledP>{method}</StyledP></SecondaryButton></Flex>
+        
       </form>
+      
       { method === 'login'? 
-      <SecondaryButton onClick = {() => changeMethod()}><p >Don't have account? create</p> </SecondaryButton>:
-      <SecondaryButton onClick = {() => changeMethod()}><p> Have account LogIn</p></SecondaryButton>}
-    </div>
+      
+      <StyledP onClick = {() => changeMethod()}><p >Don't have account? create</p> </StyledP>:
+      <StyledP onClick = {() => changeMethod()}><p> Have account? Login</p></StyledP>}
+    </StyledBox>
+
+    </Flex>
+    </StyledContainer>
+    
   );
 };
 

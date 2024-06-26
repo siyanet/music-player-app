@@ -16,6 +16,8 @@ import { getDefaultSongsFetch } from '../Actions/DefaultSongAction';
 import LogoutConfirmation from '../Components/LogOutConfirmation';
 import SongController from '../Components/SongController';
 import { faEdit, faTrashAlt, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
+import { checkFileAvailability } from '../Components/CheckFileAvailablity';
+import { clearUpdateSongState } from '../Actions/UpdateSongsActions';
 
 
 function Home(){
@@ -35,7 +37,8 @@ function Home(){
     const user = useSelector((state) => state.userFetchReducer.success);
     const [showLogout,setShowLogout] = useState(false);
     const [playingSong,setPlayingSong] = useState();
-    
+    const [loading, setLoading] = useState({});
+
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -52,6 +55,7 @@ function Home(){
     const closeEditForm = () =>{
         setShowEditForm(false);
         setSelectedSong(null);
+        dispatch(clearUpdateSongState());
         dispatch(getSongsFetch());
     }
     const openEditForm = (song) =>{
@@ -111,6 +115,9 @@ const handlePlayPause = (song) => {
 
 }
 
+
+
+
     return(
      <StyledContainer width= {'100%'} height='100%'>
                 <Flex flexDirection={'row'}width = '100%' height={'100%'}>      
@@ -161,11 +168,10 @@ const handlePlayPause = (song) => {
         {(songs && songs.length > 0 )|| (defaultSongs && defaultSongs.length > 0)? (
             <Box height={'77%'}>      <Table>
             <TableHead>
-             <TableHeader>play</TableHeader>
-             <TableHeader>img</TableHeader>
-             <TableHeader>title</TableHeader>
-             <TableHeader>musican</TableHeader>
-             <TableHeader>actions</TableHeader>
+             <TableHeader>Play</TableHeader>
+             <TableHeader>Title</TableHeader>
+             <TableHeader>Musican</TableHeader>
+             {user && <TableHeader>Actions</TableHeader>}
             </TableHead>
             <TableBody>
           { songs && songs.map((song) => {
@@ -185,11 +191,12 @@ const handlePlayPause = (song) => {
               {currentSong === song.id? <StyledIcon icon={faPause}/>: <StyledIcon icon={faPlay}/>} </SecondaryButton>
           <audio ref = {audioRefs.current[song.id]} src = {song.file}/>
           </TableCell>
-      <TableCell> </TableCell>
-      <TableCell>{song.title} </TableCell>
-      <TableCell>{song.artist} </TableCell>
-      <TableCell> <SecondaryButton onClick={() => openEditForm(song)}><StyledIcon icon={faEdit} /></SecondaryButton>
-      <SecondaryButton onClick={() => openDeleteAlert(song)}><StyledIcon icon={faTrashAlt}/></SecondaryButton></TableCell>
+     
+      <TableCell><StyledP>{song.title} </StyledP></TableCell>
+      <TableCell><StyledP>{song.artist} </StyledP></TableCell>
+      {user &&     <TableCell> <SecondaryButton onClick={() => openEditForm(song)}><StyledIcon icon={faEdit} /></SecondaryButton>
+      <SecondaryButton onClick={() => openDeleteAlert(song)}><StyledIcon icon={faTrashAlt}/></SecondaryButton></TableCell>}
+  
        </TableRow>);
           
              })}
@@ -201,17 +208,15 @@ const handlePlayPause = (song) => {
                                       return (
                                           <TableRow key={defaultSong.id}>
                                               <TableCell>
+                                                {console.log(defaultSong.file)}
                                                   <SecondaryButton onClick={() => handlePlayPause(defaultSong)}>
                                                       {currentSong === defaultSong.id ? <StyledIcon icon={faPause}/>: <StyledIcon icon={faPlay}/>}
                                                   </SecondaryButton>
                                                   <audio ref={audioRefs.current[defaultSong.id]} src={defaultSong.file} />
                                               </TableCell>
-                                              <TableCell></TableCell>
-                                              <TableCell>{defaultSong.title}</TableCell>
-                                              <TableCell>{defaultSong.artist}</TableCell>
-                                              <TableCell>
+                                              <TableCell><StyledP>{defaultSong.title}</StyledP></TableCell>
+                                              <TableCell><StyledP>{defaultSong.artist}</StyledP></TableCell>
                                               
-                                              </TableCell>
                                           </TableRow>
                                       );
                                   })}

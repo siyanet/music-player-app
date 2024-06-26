@@ -1,5 +1,5 @@
 
-import { CREATE_SONG_FAILURE, CREATE_SONG_REQUEST, CREATE_SONG_SUCCESS } from "../Actions/CreateSongsActions";
+import { CLEAR_CREATE_SONG_STATE, CREATE_SONG_FAILURE, CREATE_SONG_REQUEST, CREATE_SONG_SUCCESS } from "../Actions/CreateSongsActions";
 
 
 const initialState = {
@@ -28,6 +28,13 @@ export const createSongReducer = (state = initialState,action) =>{
                 ...state,
                 success: null,
                 error: action.payload.error,
+                loading: false,
+            };
+        case CLEAR_CREATE_SONG_STATE:
+            return{
+                ...state,
+                success: null,
+                error: null,
                 loading: false,
             }
             default: 

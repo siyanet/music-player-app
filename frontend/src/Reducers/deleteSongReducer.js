@@ -1,4 +1,5 @@
-import { DELETE_SONG_REQUEST,DELETE_SONG_SUCCESS,DELETE_SONG_FAILURE } from "../Actions/deleteSongAction";
+import { CLEAR_CREATE_SONG_STATE } from "../Actions/CreateSongsActions";
+import { DELETE_SONG_REQUEST,DELETE_SONG_SUCCESS,DELETE_SONG_FAILURE, CLEAR_SONG_DELETE_STATE } from "../Actions/deleteSongAction";
 
 
 const initialState = {
@@ -28,6 +29,13 @@ export const deleteSongReducer = (state = initialState, action) => {
                 ...state,
                 success: null,
                 error: action.payload,
+                loading: false,
+            };
+        case CLEAR_SONG_DELETE_STATE:
+            return{
+                ...state,
+                success: null,
+                error: null,
                 loading: false,
             };
         default:

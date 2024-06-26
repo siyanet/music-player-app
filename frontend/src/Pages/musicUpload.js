@@ -3,7 +3,7 @@ import { StyledContainer } from "../Components/StyledComponents/StyledContainer"
 import { PrimaryButton, SecondaryButton, StyledIcon } from "../Components/StyledComponents/StyledButtons";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createSongRequest } from "../Actions/CreateSongsActions";
+import { clearCreateSongState, createSongRequest } from "../Actions/CreateSongsActions";
 import { useNavigate } from "react-router-dom";
 import { StyledHeading, StyledHeading3, StyledP } from "../Components/StyledComponents/StyledText";
 import { StyledInput } from "../Components/StyledComponents/StyledInput";
@@ -31,8 +31,8 @@ function Upload(){
        formData.append('title', title);
        formData.append('artist', artist);
        formData.append('file', file);
-   
-       dispatch(createSongRequest(formData));
+
+       dispatch(createSongRequest(formData))
        setCreated(true);
         
     }
@@ -42,11 +42,13 @@ function Upload(){
         setArtist('');
         setFile('');
         navigate('/');
+        dispatch(clearCreateSongState());
     }
  useEffect(() =>{
     if(createSuccess && created){
     navigate('/');
     setCreated(false);
+    dispatch(clearCreateSongState());
 }
  },[createSuccess]);
     return(

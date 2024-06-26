@@ -5,6 +5,9 @@ import { logoutRequest } from "../Actions/LogoutAction";
 import { useNavigate } from "react-router-dom";
 import { userStateClear } from "../Actions/UserAction";
 import { clearLoginState } from "../Actions/LoginAction";
+import { StyledBox } from "./StyledComponents/StyledBox";
+import { StyledHeading3, StyledP } from "./StyledComponents/StyledText";
+import { clearGetSongsState } from "../Actions/GetSongsActions";
 
 
 function LogoutConfirmation({onClose}){
@@ -15,20 +18,22 @@ function LogoutConfirmation({onClose}){
         dispatch(logoutRequest());
         dispatch(userStateClear());
         dispatch(clearLoginState());
+        dispatch(clearGetSongsState());
         onClose();
         navigate('/');
 
 
     }
     return(  
-        <Box> <Flex flexDirection={'column'}>
-        <p>Are You Sure You Want To Logout?</p>
-        <Flex flexDirection={'row'}>
-            <SecondaryButton onClick={(e) => handleLogoutButton(e)}>yes</SecondaryButton>
-            <SecondaryButton onClick={onClose}>NO</SecondaryButton>
+        <StyledBox> 
+            <Flex flexDirection={'column'}>
+        <StyledHeading3>Are You Sure You Want To Logout?</StyledHeading3>
+        <Flex flexDirection={'row'} justifyContent={'space-between'}>
+            <SecondaryButton onClick={(e) => handleLogoutButton(e)}><StyledP>yes</StyledP></SecondaryButton>
+            <SecondaryButton onClick={onClose}><StyledP>NO</StyledP></SecondaryButton>
         </Flex>
     </Flex>
-    </Box>);
+    </StyledBox>);
  
 
 }

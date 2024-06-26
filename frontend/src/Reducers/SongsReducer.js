@@ -1,4 +1,5 @@
-import { GET_SONGS_FAILURE, GET_SONGS_SUCCESS } from "../Actions/GetSongsActions";
+import { CLEAR_CREATE_SONG_STATE } from "../Actions/CreateSongsActions";
+import { CLEAR_GET_SONGS_STATE, GET_SONGS_FAILURE, GET_SONGS_SUCCESS } from "../Actions/GetSongsActions";
 const initialState = {
     songs: [],
     error: null,
@@ -9,7 +10,9 @@ const songsReducer = (state = initialState,action) => {
             return {...state, songs: action.payload};
         case GET_SONGS_FAILURE:
             return {...state, error: action.payload};
-        default:
+        case CLEAR_GET_SONGS_STATE:
+            return{...state,songs: [],error: null};
+            default:
             return state;
 
     }

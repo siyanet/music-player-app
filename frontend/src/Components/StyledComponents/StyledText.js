@@ -14,7 +14,7 @@ font-size: ${props => `${props.theme.fontSizes[props.size]}px`};
 color: ${props => props.theme.colors.white};
 font-weight:${props => props.theme.fontWeights[props.weight] || props.theme.fontWeights.body};
 line-height: ${props => `${props.theme.lineHeights.body}px`};
-margin: 0;
+margin: 1;
 `;
 export const StyledHeading3 = styled.h3`
 word-wrap: break-word;

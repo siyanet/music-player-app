@@ -7,9 +7,7 @@ class SongSerializer(serializers.ModelSerializer):
     class Meta:
         model = Song
         fields = '__all__'
-        extra_kwargs = {
-            'file': {'required': False},
-        }
+        
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

@@ -3,6 +3,7 @@ import {
     UPDATE_SONG_SUCCESS,
     UPDATE_SONG_FAILURE,
     UPDATE_SONG_REQUEST,
+    CLEAR_UPDATE_SONG_STATE,
   } from '../Actions/UpdateSongsActions';
   
   const initialState = {
@@ -32,6 +33,13 @@ import {
           ...state,
           loading: false,
           error: action.payload.error,
+          success: null
+        };
+      case CLEAR_UPDATE_SONG_STATE:
+        return{
+          ...state,
+          loading: false,
+          error: null,
           success: null
         };
       default:

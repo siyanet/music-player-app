@@ -6,7 +6,7 @@ import axiosInstance from "../Components/AxiosInstance";
    console.log(songId);
     
     try{
-        return axiosInstance.put(`http://127.0.0.1:8000/api/songUpdate/${songId}/`,updatedData);
+        return axiosInstance.patch(`http://127.0.0.1:8000/api/songUpdate/${songId}/`,updatedData);
     }
 catch(e){
     throw new Error("can't fetch data");

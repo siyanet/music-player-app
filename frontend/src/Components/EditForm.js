@@ -5,7 +5,8 @@ import { Box ,  Flex} from "rebass";
 import { updateSongRequest} from "../Actions/UpdateSongsActions";
 import { StyledInput } from "./StyledComponents/StyledInput";
 import { SecondaryButton } from "./StyledComponents/StyledButtons";
-import { StyledHeading, StyledHeading3 } from "./StyledComponents/StyledText";
+import { StyledHeading, StyledHeading3, StyledP } from "./StyledComponents/StyledText";
+import { StyledBox } from "./StyledComponents/StyledBox";
 
 function EditForm({song,onClose}) {
     const [title,setTitle] = useState(song.title);
@@ -49,18 +50,19 @@ const handleArtistValidation = (e) =>{
    }
 };
 return(
-    <Box  sx={{
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '400px',
-        bg: '#059e08',
-    //   tertiary: '',
-        p: 3,
-        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-        zIndex: 1000,
-    }}>
+    // <Box  sx={{
+    //     position: 'fixed',
+    //     top: '50%',
+    //     left: '50%',
+    //     transform: 'translate(-50%, -50%)',
+    //     width: '400px',
+    //     bg: '#006100',
+    // //   tertiary: '',
+    //     p: 3,
+    //     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    //     zIndex: 1000,
+    // }}>
+    <StyledBox>
         <Box >
             <Flex justifyContent={'center'} alignItems={'center'}>
             <StyledHeading>Edit Song</StyledHeading>
@@ -74,16 +76,17 @@ return(
         <label htmlFor="artist"><StyledHeading3>Artist</StyledHeading3></label>
         <StyledInput id="musician" name="artist" value={artist} onChange={(e) => handleArtistValidation(e)} />
         {artistError && <span>{artistError}</span>}
-        <Flex justifyContent={'space-between'} m = {'4px'}>  
-             <SecondaryButton hoverColor = {'#c1e167'} mt={3} onClick={(e) => handleSubmit(e)}>Update</SecondaryButton>
-        <SecondaryButton hoverColor={'#cle167'} mt={2} onClick = {onClose}>Cancel</SecondaryButton></Flex>
-        {updateError && <Box>{updateError}</Box>}
+        <Flex justifyContent={'space-between'} flexDirection={'row'} >  
+             <SecondaryButton  onClick={(e) => handleSubmit(e)}><StyledP>Update</StyledP></SecondaryButton>
+        <SecondaryButton  onClick = {onClose}><StyledP>Cancel</StyledP></SecondaryButton>
+        </Flex>
+        {updateError && <Box bg = 'red'>{updateError}</Box>}
        
       
 
         </Flex>
 
-    </Box>
+    </StyledBox>
 );
 
 }

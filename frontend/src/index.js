@@ -19,7 +19,8 @@ import createSagaMiddleware from 'redux-saga'
 import { BrowserRouter as Router } from 'react-router-dom';
 const sagaMiddleWare = createSagaMiddleware();
 const store = configureStore({reducer: rootReducer,
-  middleware:(getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleWare ),});
+  middleware:(getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}).concat(sagaMiddleWare ),
+});
 
 
 sagaMiddleWare.run(rootSaga);
