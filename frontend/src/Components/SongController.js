@@ -5,8 +5,8 @@ import { faPause, faPlay, faStepBackward, faStepForward } from "@fortawesome/fre
 import { CustomSlider} from "./StyledComponents/StyledSlider";
 import { StyledP } from "./StyledComponents/StyledText";
 
-function SongController({currentSong,audioRefs,handlePlayPause,isPlaying,isButtonDisabled}){
-     const audioRef = audioRefs.current[currentSong.id];
+function SongController({audioRefs ,setCurrentPlayingSong,defaultSongs,songs,handlePlayPause,isButtonDisabled,songIdArray,playingSong,currentPlayingSongId,playingRequestSong,setPlayingRequestSong}){
+     const audioRef = audioRefs.current[playingSong.id];
     const [currentTime,setCurrentTime] = useState(0);
     const [duration,setDuration] = useState(0);
    
@@ -41,13 +41,45 @@ function SongController({currentSong,audioRefs,handlePlayPause,isPlaying,isButto
             }
         };
     }, [audioRef]);
+
+
+    const handlePrevious = () => {
+        const currentIndex = songIdArray.findIndex(id => id === playingSong.id);
+        if (currentIndex > 0) {
+            const previousSongId = songIdArray[currentIndex - 1];
+            const previousSong = songs.find(song => song.id === previousSongId) || defaultSongs.find(song => song.id === previousSongId);
+            
+            setPlayingRequestSong(previousSong);
+           
+        }
+        else{
+
+        }
+    };
+    
+    const handleNext = () => {
+        const currentIndex = songIdArray.findIndex(id => id === playingSong.id);
+        if (currentIndex < songIdArray.length - 1) {
+            const nextSongId = songIdArray[currentIndex + 1];
+            const nextSong = songs.find(song => song.id === nextSongId) || defaultSongs.find(song => song.id === nextSongId);
+            
+            setPlayingRequestSong(nextSong);
+          
+        }
+    };
+
+
     return(
         <Box>
             <Flex flexDirection={'column'} width={'100%'}>
             <Flex flexDirection={'row'} width={'100%'} justifyContent={"center"}>
-                <SecondaryButton><StyledIcon icon={faStepBackward}/></SecondaryButton>
-                {isPlaying? <SecondaryButton disabled = {isButtonDisabled}onClick={ () => handlePlayPause(currentSong)}><StyledIcon disabled={isButtonDisabled} icon={faPause}/> </SecondaryButton>:<SecondaryButton onClick={() =>handlePlayPause(currentSong)}><StyledIcon icon={faPlay}/></SecondaryButton>}
-                <SecondaryButton><StyledIcon icon={faStepForward}/></SecondaryButton>
+
+                <SecondaryButton onClick={() => setCurrentPlayingSong(null)}><StyledIcon icon={faStepBackward}/></SecondaryButton>
+
+                <SecondaryButton disabled = {isButtonDisabled}onClick={handlePlayPause}>
+                    {currentPlayingSongId?  <StyledIcon icon={faPause}/> : <StyledIcon icon={faPlay}/>} </SecondaryButton>
+
+                <SecondaryButton onClick={handleNext}><StyledIcon icon={faStepForward}/></SecondaryButton>
             </Flex>
             <Flex flexDirection={'row'} justifyContent={"center"}>
                 <StyledP width= {'5%'}>{formatTime(currentTime)}</StyledP>

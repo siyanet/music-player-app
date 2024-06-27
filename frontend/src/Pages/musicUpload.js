@@ -12,9 +12,9 @@ import { StyledErrorBox, StyledLoadingBox } from "../Components/StyledComponents
 
 
 function Upload(){
-  const  [title,setTitle] = useState(null);
-   const [artist,setArtist] = useState(null);
-   const [file,setFile] = useState(null);
+  const  [title,setTitle] = useState('');
+   const [artist,setArtist] = useState('');
+   const [file,setFile] = useState('');
    const [titleError,setTitleError] = useState(null);
    const [artistError,setArtistError] = useState(null);
    const [fileError,setFileError] = useState(null);

@@ -24,7 +24,7 @@ function Home(){
     const songs = useSelector((state) => state.songsReducer.songs);
     const defaultSongs = useSelector((state) => state.defaultSongsReducer.songs);
     const audioRefs = useRef({});
-    const [currentSong,setCurrentSong] = useState(null);
+    const [currentPlayingSongId,setCurrentPlayingSongId] = useState(null);
     const [showEditForm,setShowEditForm] = useState(false);
     const [selectedSong,setSelectedSong] = useState(null);
     const [showDeleteAlert,setShowDeleteAlert] = useState(false);
@@ -38,7 +38,8 @@ function Home(){
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [playingError,setPlayingError] = useState(null);
     const [playingLoading,setPlayingLoading] = useState(false);
-    const songIdArray = [];
+    const [playingRequestSong,setPlayingRequestSong] = useState(null);
+    const [songIdArray, setSongIdArray] = useState([]);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
@@ -84,13 +85,29 @@ const logIn = () =>{
     dispatch(logoutStateClear());
     navigate('/login');
 }
+useEffect(() => {
+    const allSongIds = [...songs.map(song => song.id), ...defaultSongs.map(song => song.id)];
+    setSongIdArray(allSongIds);
+}, [songs,defaultSongs]);
+
+useEffect(() => {
+    if (playingRequestSong) {
+        handlePlayPause();
+    }
+}, [playingRequestSong]);
+
+const handlePlayPause = async() => {
+ 
 
 
+    
 
-const handlePlayPause = async(song) => {
-    const audioRef = audioRefs.current[song.id] ? audioRefs.current[song.id].current : null;
-    setIsButtonDisabled(true);
+    const audioRef = playingRequestSong && audioRefs.current[playingRequestSong.id] 
+    ? audioRefs.current[playingRequestSong.id].current 
+    : null;
+    
     if(!audioRef) return;
+    setIsButtonDisabled(true);
     Object.values(audioRefs.current).forEach((ref) => {
         if (ref.current && !ref.current.paused && ref.current !== audioRef) {
           ref.current.pause();
@@ -100,16 +117,16 @@ const handlePlayPause = async(song) => {
       try{
         if(audioRef.paused){
              await audioRef.play();
-            setCurrentSong(song.id);
-            setPlayingSong(song);
+            setCurrentPlayingSongId(playingRequestSong.id);
+            setPlayingSong(playingRequestSong);
             }
        else{
                audioRef.pause();
-               setCurrentSong(null)
+               setCurrentPlayingSongId(null)
            }
       }
       catch(error){
-        setPlayingError("wait untill it loadded");
+        setPlayingError("error in playing the song");
       }
       finally{
         setIsButtonDisabled(false);
@@ -184,7 +201,7 @@ const handlePlayPause = async(song) => {
             
                 <TableBody >
           { songs && songs.map((song) => {
-              
+           
              
                
                   
@@ -194,10 +211,10 @@ const handlePlayPause = async(song) => {
               }
          
         return( <TableRow key ={song.id}> 
-        songIdArray.add(song.id);
+       
           <TableCell> 
-              <SecondaryButton disabled= {isButtonDisabled} onClick = {()=>  handlePlayPause(song)}>
-              {currentSong === song.id? <StyledIcon icon={faPause}/>: <StyledIcon icon={faPlay}/>} </SecondaryButton>
+              <SecondaryButton disabled= {isButtonDisabled} onClick = {()=> setPlayingRequestSong(song)}>
+              {currentPlayingSongId === song.id? <StyledIcon icon={faPause}/>: <StyledIcon icon={faPlay}/>} </SecondaryButton>
           <audio  ref = {audioRefs.current[song.id]} src = {song.file}/>
           </TableCell>
      
@@ -210,7 +227,7 @@ const handlePlayPause = async(song) => {
           
              })}
                {defaultSongs && defaultSongs.map((defaultSong) => {
-                songIdArray.add(defaultSong.id);
+              
                                       if (!audioRefs.current[defaultSong.id]) {
                                           audioRefs.current[defaultSong.id] = createRef();
                                       }
@@ -219,8 +236,8 @@ const handlePlayPause = async(song) => {
                                           <TableRow key={defaultSong.id}>
                                               <TableCell>
                                               
-                                                  <SecondaryButton disabled={isButtonDisabled} onClick={() => handlePlayPause(defaultSong)}>
-                                                      {currentSong === defaultSong.id ? <StyledIcon icon={faPause}/>: <StyledIcon icon={faPlay}/>}
+                                                  <SecondaryButton disabled={isButtonDisabled} onClick={() =>setPlayingRequestSong(defaultSong)}>
+                                                      {currentPlayingSongId === defaultSong.id ? <StyledIcon icon={faPause}/>: <StyledIcon icon={faPlay}/>}
                                                   </SecondaryButton>
                                                   <audio ref={audioRefs.current[defaultSong.id]} src={defaultSong.file} />
                                               </TableCell>
@@ -246,9 +263,20 @@ const handlePlayPause = async(song) => {
       
         {showDeleteAlert && selectedSong && <DeleteAlert song = {selectedSong} onClose = {closeDeleteAlert}/>}
         {showLogout && <LogoutConfirmation onClose = {closedLogout}/>}
-    
         {playingSong && 
-        <Box height={'13%'} width={'100%'} ><SongController currentSong={playingSong} audioRefs={audioRefs} isButtonDisabled= {isButtonDisabled} handlePlayPause = {handlePlayPause} isPlaying={currentSong}/></Box> }
+        <Box height={'13%'} width={'100%'} > 
+        <SongController audioRefs={audioRefs} songIdArray={songIdArray} playingSong={playingSong} currentPlayingSongId={currentPlayingSongId}
+        playingRequestSong = {playingRequestSong} setPlayingRequestSong={setPlayingRequestSong} handlePlayPause={handlePlayPause} isButtonDisabled={isButtonDisabled}
+        songs = {songs} defaultSongs={defaultSongs}
+        setCurrentPlayingSongId= {setCurrentPlayingSongId}>
+
+        </SongController>
+        
+        </Box>
+            
+            
+            }
+       
         </Flex>
         </Box>
         </Flex>
