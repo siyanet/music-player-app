@@ -1,4 +1,4 @@
-// Example: Importing in JSX (React)
+
 import './Components/StyledComponents/reset.css'
 
 import React from 'react';

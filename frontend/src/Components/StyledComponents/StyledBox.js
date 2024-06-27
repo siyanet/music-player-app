@@ -7,8 +7,16 @@ export const StyledBox = styled(Box)`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 400px;
-  background-color: #006100;  /* Use background-color instead of bg */
-  padding: 1rem;  /* Adjust the padding as needed */
+  background-color: ${props => props.theme.colors.primary};
+  padding: ${props => `${props.theme.space[3]}px`};
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+
+`;
+export const StyledErrorBox = styled(Box)`
+background-color: red;
+width: 100%;
+`;
+export const StyledLoadingBox = styled(Box)`
+text-align: center;
+width: 100%;
 `;

@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, Text } from 'rebass';
+import { Box, Flex } from 'rebass';
 import { StyledHeading, StyledHeading3, StyledP } from '../Components/StyledComponents/StyledText';
 import { StyledContainer } from '../Components/StyledComponents/StyledContainer';
 import { PrimaryButton, SecondaryButton, StyledIcon } from '../Components/StyledComponents/StyledButtons';
@@ -7,17 +7,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { getSongsFetch } from '../Actions/GetSongsActions';
 import { createRef, useEffect,useRef, useState } from 'react';
 import EditForm from '../Components/EditForm';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import DeleteAlert from '../Components/DeleteAlert';
-import { logoutRequest, logoutStateClear } from '../Actions/LogoutAction';
-import { clearLoginState } from '../Actions/LoginAction';
-import { userStateClear } from '../Actions/UserAction';
+import { logoutStateClear } from '../Actions/LogoutAction';
 import { getDefaultSongsFetch } from '../Actions/DefaultSongAction';
 import LogoutConfirmation from '../Components/LogOutConfirmation';
 import SongController from '../Components/SongController';
 import { faEdit, faTrashAlt, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
-import { checkFileAvailability } from '../Components/CheckFileAvailablity';
 import { clearUpdateSongState } from '../Actions/UpdateSongsActions';
+import { clearSongDeleteState } from '../Actions/deleteSongAction';
+import { StyledErrorBox, StyledLoadingBox } from '../Components/StyledComponents/StyledBox';
 
 
 function Home(){
@@ -30,16 +29,16 @@ function Home(){
     const [selectedSong,setSelectedSong] = useState(null);
     const [showDeleteAlert,setShowDeleteAlert] = useState(false);
     const [navigateToUpload,setNavigateToUpload] = useState(false);
-    const [navigateToLogin,setNavigateToLogin] = useState(false);
+   
     const loggedOut = useSelector((state) => state.logoutReducer.loggedOut);
-    // const loginSuccess = useSelector((state) => state.loginReducer.success);
     const loginSuccess = useSelector((state) => state.loginReducer.success);
     const user = useSelector((state) => state.userFetchReducer.success);
     const [showLogout,setShowLogout] = useState(false);
     const [playingSong,setPlayingSong] = useState();
-    const [loading, setLoading] = useState({});
-
-    
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [playingError,setPlayingError] = useState(null);
+    const [playingLoading,setPlayingLoading] = useState(false);
+    const songIdArray = [];
     const dispatch = useDispatch();
     const navigate = useNavigate();
     useEffect(() => {
@@ -49,9 +48,7 @@ function Home(){
     if(navigateToUpload === true){
        navigate('/upload');
     }
-    if(navigateToLogin === true){
-        navigate('/login');
-    }
+   
     const closeEditForm = () =>{
         setShowEditForm(false);
         setSelectedSong(null);
@@ -60,7 +57,7 @@ function Home(){
     }
     const openEditForm = (song) =>{
         setShowEditForm(true);
-        setSelectedSong(song)
+        setSelectedSong(song);
         
     }
     const closedLogout = () =>{
@@ -72,6 +69,7 @@ function Home(){
     const closeDeleteAlert = () =>{
         setShowDeleteAlert(false);
         setSelectedSong(null);
+        dispatch(clearSongDeleteState());
         dispatch(getSongsFetch());
     }
     const openDeleteAlert = (song) =>{
@@ -81,11 +79,7 @@ function Home(){
 
     }
 
-const logOut = () =>{
-    dispatch(logoutRequest());
-    dispatch(userStateClear());
-    dispatch(clearLoginState());
-}
+
 const logIn = () =>{
     dispatch(logoutStateClear());
     navigate('/login');
@@ -93,24 +87,35 @@ const logIn = () =>{
 
 
 
-const handlePlayPause = (song) => {
+const handlePlayPause = async(song) => {
     const audioRef = audioRefs.current[song.id] ? audioRefs.current[song.id].current : null;
-
+    setIsButtonDisabled(true);
     if(!audioRef) return;
     Object.values(audioRefs.current).forEach((ref) => {
         if (ref.current && !ref.current.paused && ref.current !== audioRef) {
           ref.current.pause();
         }
       });
-   if(audioRef.paused){
-         audioRef.play();
-         setCurrentSong(song.id);
-         setPlayingSong(song);
-         }
-    else{
-            audioRef.pause();
-            setCurrentSong(null)
-        }
+      setPlayingLoading(true);
+      try{
+        if(audioRef.paused){
+             await audioRef.play();
+            setCurrentSong(song.id);
+            setPlayingSong(song);
+            }
+       else{
+               audioRef.pause();
+               setCurrentSong(null)
+           }
+      }
+      catch(error){
+        setPlayingError("wait untill it loadded");
+      }
+      finally{
+        setIsButtonDisabled(false);
+        setPlayingLoading(false);
+      }
+ 
 
 
 }
@@ -127,8 +132,10 @@ const handlePlayPause = (song) => {
                 <StyledHeading> My</StyledHeading>
                 <StyledHeading>Music</StyledHeading>
                 </Flex>
+               
             
-                    <Box height={'77vh'}>    
+                    <Box height={'77vh'}>  
+                    
                         <Flex flexDirection={'column'}>
                          <PrimaryButton backgroundColor="#006100" hoverColor="#059e08">
                     <StyledHeading3>Home</StyledHeading3>
@@ -141,13 +148,9 @@ const handlePlayPause = (song) => {
 
 
                    {playingSong && <Box height={'13%'} width={'100%'}>
-                    <Flex  white-space= {"pre-wrap"} flexDirection={'column'} width={'100%'} flexWrap="wrap" height = {'100%'}alignItems={'center'}>
+                    <Flex  flexDirection={'column'} width={'100%'} height = {'100%'}alignItems={'center'}>
                         <StyledHeading3> {playingSong.title}</StyledHeading3>
                         <StyledP>{playingSong.artist}</StyledP>
-                      
-                     
-                       
-                        
                     </Flex>
                         </Box>}  
                         
@@ -156,6 +159,8 @@ const handlePlayPause = (song) => {
         </Box>
         <Box width={'85%'} margin={3} height={'100%'}>
             <Flex flexDirection={'column'} height = {'100%'}width={'100%'}>
+            {playingError && <StyledErrorBox><StyledHeading3>{playingError}</StyledHeading3></StyledErrorBox>}
+            {playingLoading && <StyledLoadingBox><StyledHeading3>Loading a song ...</StyledHeading3></StyledLoadingBox>}  
                 <Box height='10%'>               
         <Flex flexDirection={'row'} justifyContent={'flex-end'} width={'100%'}>
            
@@ -168,40 +173,44 @@ const handlePlayPause = (song) => {
         {(songs && songs.length > 0 )|| (defaultSongs && defaultSongs.length > 0)? (
             <Box height={'77%'} overflowX={'hidden'} overflowY={'auto'}>      <Table>
             <TableHead>
-             <TableHeader>Play</TableHeader>
+                <TableRow>
+                <TableHeader>Play</TableHeader>
              <TableHeader>Title</TableHeader>
              <TableHeader>Musican</TableHeader>
              {user && <TableHeader>Actions</TableHeader>}
+                </TableRow>
+             
             </TableHead>
             
                 <TableBody >
           { songs && songs.map((song) => {
-                  // <EditForm onClose={closeEditForm} songId ={ song.id}></EditForm>
-              // <EditForm onClose = {closeEditForm} songId = {song.id}></EditForm>
+              
              
-              {  
-                  // Initialize audioRef for each song if not already initialized
+               
+                  
                   if (!audioRefs.current[song.id]) {
                     audioRefs.current[song.id] = createRef();
-                  }
+                  
               }
          
         return( <TableRow key ={song.id}> 
+        songIdArray.add(song.id);
           <TableCell> 
-              <SecondaryButton onClick = {()=>  handlePlayPause(song)}>
+              <SecondaryButton disabled= {isButtonDisabled} onClick = {()=>  handlePlayPause(song)}>
               {currentSong === song.id? <StyledIcon icon={faPause}/>: <StyledIcon icon={faPlay}/>} </SecondaryButton>
           <audio  ref = {audioRefs.current[song.id]} src = {song.file}/>
           </TableCell>
      
       <TableCell><StyledP>{song.title} </StyledP></TableCell>
       <TableCell><StyledP>{song.artist} </StyledP></TableCell>
-      {user &&     <TableCell> <SecondaryButton onClick={() => openEditForm(song)}><StyledIcon icon={faEdit} /></SecondaryButton>
+      {user && <TableCell> <SecondaryButton onClick={() => openEditForm(song)}><StyledIcon icon={faEdit} /></SecondaryButton>
       <SecondaryButton onClick={() => openDeleteAlert(song)}><StyledIcon icon={faTrashAlt}/></SecondaryButton></TableCell>}
   
        </TableRow>);
           
              })}
                {defaultSongs && defaultSongs.map((defaultSong) => {
+                songIdArray.add(defaultSong.id);
                                       if (!audioRefs.current[defaultSong.id]) {
                                           audioRefs.current[defaultSong.id] = createRef();
                                       }
@@ -209,8 +218,8 @@ const handlePlayPause = (song) => {
                                       return (
                                           <TableRow key={defaultSong.id}>
                                               <TableCell>
-                                                {console.log(defaultSong.file)}
-                                                  <SecondaryButton onClick={() => handlePlayPause(defaultSong)}>
+                                              
+                                                  <SecondaryButton disabled={isButtonDisabled} onClick={() => handlePlayPause(defaultSong)}>
                                                       {currentSong === defaultSong.id ? <StyledIcon icon={faPause}/>: <StyledIcon icon={faPlay}/>}
                                                   </SecondaryButton>
                                                   <audio ref={audioRefs.current[defaultSong.id]} src={defaultSong.file} />
@@ -239,7 +248,7 @@ const handlePlayPause = (song) => {
         {showLogout && <LogoutConfirmation onClose = {closedLogout}/>}
     
         {playingSong && 
-        <Box height={'13%'} width={'100%'} ><SongController currentSong={playingSong} audioRefs={audioRefs} handlePlayPause = {handlePlayPause} isPlaying={currentSong}/></Box> }
+        <Box height={'13%'} width={'100%'} ><SongController currentSong={playingSong} audioRefs={audioRefs} isButtonDisabled= {isButtonDisabled} handlePlayPause = {handlePlayPause} isPlaying={currentSong}/></Box> }
         </Flex>
         </Box>
         </Flex>

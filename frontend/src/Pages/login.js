@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userRegisterRequest } from '../Actions/RegiserAction';
 import { useNavigate } from 'react-router-dom';
-import { PrimaryButton, SecondaryButton } from '../Components/StyledComponents/StyledButtons';
+import { SecondaryButton } from '../Components/StyledComponents/StyledButtons';
 import { loginRequest } from '../Actions/LoginAction';
 import { StyledContainer } from '../Components/StyledComponents/StyledContainer';
-import { StyledBox } from '../Components/StyledComponents/StyledBox';
-import { StyledHeading, StyledHeading3, StyledP } from '../Components/StyledComponents/StyledText';
+import { StyledBox, StyledErrorBox } from '../Components/StyledComponents/StyledBox';
+import { StyledHeading,  StyledP } from '../Components/StyledComponents/StyledText';
 import { Box, Flex } from 'rebass';
 import { StyledInput } from '../Components/StyledComponents/StyledInput';
 
@@ -26,24 +26,43 @@ const Login = () => {
   const loginSuccess = useSelector((state) => state.loginReducer.success);
   const loginError = useSelector((state) => state.loginReducer.error);
 
-//   const [success,setSuccess] = useState(false);
-//   const [logedIn,setLogedin] = useState(false);
-//   const [registered,setRegistered] = useState(false);
+
 
 
 const validateUserName = (e) =>{
     setUsername(e.target.value);
-    if(method === 'register'){
+    
+      if(!username){
+        setUserNameInputError("username required")
 
-    }
+      }
+      else if(username.length < 3 || username.length > 20){
+        setUserNameInputError(" username should be between 3 and 20 characters")
+      }
+      else if(!/^[a-zA-Z0-9_.]+$/.test(username)){
+        setUserNameInputError('username can only contain letters, numbers and underscores');
+      }
+      else{
+        setUserNameInputError("");
+      }
+     
+
+    
 
 
 }
 const validatePassword = (e) =>{
     setPassword(e.target.value);
-    if(method === 'register'){
-
+    if(!password){
+      setPasswordInputError('password required');
     }
+    else if(password.length < 8){
+      setPasswordInputError('password must be at least 8 characters')
+    }
+    else{
+      setPasswordInputError('');
+    }
+    
 
 }
 const changeMethod = () => {
@@ -55,14 +74,15 @@ const changeMethod = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(method === 'register'){
+    if(method === 'register' && userNameInputError === '' && passwordInputError === ''){
         dispatch(userRegisterRequest(username,password));
-        // setRegistered(true);
+       
+       
     }
-    else if(method === 'login'){
+    else if(method === 'login' && userNameInputError === '' && passwordInputError === ''){
         dispatch(loginRequest(username,password));
-        
-        // setLogedin(true);
+      
+     
     }
    
  
@@ -77,10 +97,7 @@ const changeMethod = () => {
     }
      
     else if (method === 'register' && registerSuccess) {
-        // Set registered to true upon successful registration
-       setUsername('');
-       setPassword('');
-       setMethod('login');
+       changeMethod();
    }
 
 
@@ -89,13 +106,11 @@ const changeMethod = () => {
 
   return (
     <StyledContainer >
+      {registerError && <StyledErrorBox>{registerError}</StyledErrorBox>}
+      {loginError && <StyledErrorBox>{loginError}</StyledErrorBox>}
       <Flex flexDirection={'column'} width={'100%'}>
        
-
-{/* {loginError && <StyledHeading>{loginError}</StyledHeading>}
-            {registerError && <StyledHeading>{registerError}</StyledHeading>}
-             */}
-             <Box marginTop={'130px'} position="fixed" width="100%"> <Flex flexDirection={'column'} justifyContent={'center'} alignItems={'center'} ><StyledHeading>Wellcome To</StyledHeading> 
+             <Box  position="fixed" marginTop={'10%'} width="100%"> <Flex flexDirection={'column'} justifyContent={'center'} alignItems={'center'} ><StyledHeading>Wellcome To</StyledHeading> 
              <StyledHeading>My Music</StyledHeading>
              
              </Flex></Box>
@@ -108,15 +123,16 @@ const changeMethod = () => {
           <StyledP> Username:</StyledP>
          
           <StyledInput type="text" value={username} onChange={(e) => validateUserName(e)} required />
+          
         </label>
-       { userNameInputError && <span>userNameInputError</span>}
+       { userNameInputError && <span><StyledP>{userNameInputError}</StyledP></span>}
         <br />
         <label>
           <StyledP>Password:</StyledP>
           
           <StyledInput type="password" value={password} onChange={(e) => validatePassword(e)} required />
         </label>
-        {passwordInputError && <span> passwordInputError</span>}
+        {passwordInputError && <span> <StyledP>{passwordInputError}</StyledP></span>}
         <br />
         <Flex justifyContent={'center'}><SecondaryButton type="submit"><StyledP>{method}</StyledP></SecondaryButton></Flex>
         
@@ -124,8 +140,8 @@ const changeMethod = () => {
       
       { method === 'login'? 
       
-      <StyledP onClick = {() => changeMethod()}><p >Don't have account? create</p> </StyledP>:
-      <StyledP onClick = {() => changeMethod()}><p> Have account? Login</p></StyledP>}
+      <StyledP onClick = {() => changeMethod() }>Don't have account? create </StyledP>:
+      <StyledP onClick = {() => changeMethod()}>Have account? Login</StyledP>}
     </StyledBox>
 
     </Flex>

@@ -10,7 +10,7 @@ function login(formData, api) {
     }).then(response => {
         if (!response.ok) {
             return response.json().then(errorData => {
-                throw new Error(errorData.detail || "something went wrong");
+                throw new Error("something went wrong");
             });
         }
         return response.json();
@@ -22,13 +22,9 @@ function* loginWorker (action) {
         const formData = new FormData();
         formData.append('username',username);
         formData.append('password',password);
-        console.log("login");
         const  api = "http://127.0.0.1:8000/api/token/access";
         const tokens = yield call(login,formData,api);
         const { access, refresh } = tokens;
-        console.log('tokens', tokens); // Log the entire tokens object
-        console.log('access', access);
-        console.log('refresh', refresh);
         localStorage.clear();
         localStorage.setItem('accessToken', access);
         localStorage.setItem('refreshToken', refresh);

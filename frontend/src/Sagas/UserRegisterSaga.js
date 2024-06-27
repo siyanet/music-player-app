@@ -8,7 +8,7 @@ function register(formData, api) {
     }).then(response => {
         if (!response.ok) {
             return response.json().then(errorData => {
-                throw new Error(errorData.detail || "something went wrong");
+                throw new Error("can't register user");
             });
         }
         return response.json();

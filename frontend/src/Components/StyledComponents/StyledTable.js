@@ -14,7 +14,7 @@ font-weight: ${props => props.theme.fontWeights.bold};
 padding: ${props => `${props.theme.space[2]}px`};
 `;
 export const TableRow = styled.tr`
-&:nth-child(even){
+&:nth-of-type(even){
 background-color: ${props => props.theme.colors.gray}};
 
 `;

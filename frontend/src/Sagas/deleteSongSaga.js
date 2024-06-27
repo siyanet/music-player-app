@@ -1,14 +1,20 @@
 import { takeLatest,call,put } from "redux-saga/effects";
-import { DELETE_SONG_REQUEST, deleteSongFailure, deleteSongRequest, deleteSongSuccess } from "../Actions/deleteSongAction";
+import { DELETE_SONG_REQUEST, deleteSongFailure, deleteSongSuccess } from "../Actions/deleteSongAction";
 import axiosInstance from "../Components/AxiosInstance";
 
 function deleteSong(songId){
-    return axiosInstance.delete(`/songDelete/${songId}/`);
+    try{
+        return axiosInstance.delete(`/songDelete/${songId}/`);
+    }
+    catch(e){
+        throw new Error("error while deleting the data");
+    }
+    
 
 }
 function* deleteSongWorker(action){
     const songId = action.payload.payload;
-    console.log(songId);
+    
     try{
         const song = yield call(deleteSong,songId);
         yield put(deleteSongSuccess(song));

@@ -19,6 +19,6 @@ export default function* rootSaga() {
      loginSaga(),
      userSaga(),
      defaultSongSaga(),
-      // Add other sagas here
+
     ]);
   }

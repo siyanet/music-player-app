@@ -3,13 +3,13 @@ import { UPDATE_SONG_FAILURE,UPDATE_SONG_REQUEST, UPDATE_SONG_SUCCESS } from "..
 import axiosInstance from "../Components/AxiosInstance";
 
  function updateSong(songId, updatedData) {
-   console.log(songId);
+ 
     
     try{
         return axiosInstance.patch(`http://127.0.0.1:8000/api/songUpdate/${songId}/`,updatedData);
     }
 catch(e){
-    throw new Error("can't fetch data");
+    throw new Error("can't update the song");
 }}
 
         

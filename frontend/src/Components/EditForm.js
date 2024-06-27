@@ -1,4 +1,4 @@
-import { hasFormSubmit } from "@testing-library/user-event/dist/utils";
+
 import { useState,useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { Box ,  Flex} from "rebass";
@@ -6,7 +6,7 @@ import { updateSongRequest} from "../Actions/UpdateSongsActions";
 import { StyledInput } from "./StyledComponents/StyledInput";
 import { SecondaryButton } from "./StyledComponents/StyledButtons";
 import { StyledHeading, StyledHeading3, StyledP } from "./StyledComponents/StyledText";
-import { StyledBox } from "./StyledComponents/StyledBox";
+import { StyledBox, StyledErrorBox, StyledLoadingBox } from "./StyledComponents/StyledBox";
 
 function EditForm({song,onClose}) {
     const [title,setTitle] = useState(song.title);
@@ -50,19 +50,9 @@ const handleArtistValidation = (e) =>{
    }
 };
 return(
-    // <Box  sx={{
-    //     position: 'fixed',
-    //     top: '50%',
-    //     left: '50%',
-    //     transform: 'translate(-50%, -50%)',
-    //     width: '400px',
-    //     bg: '#006100',
-    // //   tertiary: '',
-    //     p: 3,
-    //     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    //     zIndex: 1000,
-    // }}>
     <StyledBox>
+        {updateLoading && <StyledLoadingBox>{updateLoading}</StyledLoadingBox>}
+        {updateError && <StyledErrorBox>{updateError}</StyledErrorBox>}
         <Box >
             <Flex justifyContent={'center'} alignItems={'center'}>
             <StyledHeading>Edit Song</StyledHeading>
@@ -80,10 +70,6 @@ return(
              <SecondaryButton  onClick={(e) => handleSubmit(e)}><StyledP>Update</StyledP></SecondaryButton>
         <SecondaryButton  onClick = {onClose}><StyledP>Cancel</StyledP></SecondaryButton>
         </Flex>
-        {updateError && <Box bg = 'red'>{updateError}</Box>}
-       
-      
-
         </Flex>
 
     </StyledBox>

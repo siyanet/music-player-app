@@ -1,6 +1,5 @@
 import { Navigate } from "react-router-dom";
 import {jwtDecode} from 'jwt-decode';
-
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "../Actions/LoginAction";
@@ -11,8 +10,17 @@ function ProtectedRoute({ children }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        auth().catch(() => {setIsAuthorized(false); 
-        console.log('have auth error')});
+        const checkAuth = async () => {
+            try {
+                await auth();
+            } catch (error) {
+                setIsAuthorized(false);
+            }
+        };
+
+        checkAuth(); 
+        
+    
     }, []);
 
     const refreshToken = async () => {
@@ -21,7 +29,7 @@ function ProtectedRoute({ children }) {
             const response = await fetch('http://127.0.0.1:8000/api/token/refresh', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded' // Assuming refreshToken is form-urlencoded
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: `refresh=${refreshToken}`
             });
@@ -39,7 +47,7 @@ function ProtectedRoute({ children }) {
            
             
         } catch (error) {
-            console.log(error);
+            
             setIsAuthorized(false);
         }
     };
@@ -47,7 +55,7 @@ function ProtectedRoute({ children }) {
     const auth = async () => {
         const token = localStorage.getItem('accessToken');
         if (!token) {
-            console.log('have no accessToken');
+           
             setIsAuthorized(false);
             return;
         }
@@ -66,13 +74,13 @@ function ProtectedRoute({ children }) {
                
             }
         } catch (error) {
-            console.log(error);
+            
             setIsAuthorized(false);
         }
     };
 
     if (isAuthorized === null) {
-        return <div>Loading...</div>;
+       return 
     }
 
     return isAuthorized ? children : <Navigate to="/login" />;

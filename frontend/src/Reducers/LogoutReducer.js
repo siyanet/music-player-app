@@ -7,6 +7,8 @@ const initialState = {
 const logoutReducer = (state = initialState, action) => {
     switch (action.type) {
         case LOGOUT_REQUEST:
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
             return {
                 ...state,
                 loggedOut: true,
