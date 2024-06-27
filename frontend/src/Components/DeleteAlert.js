@@ -4,7 +4,7 @@ import { Box ,  Flex} from "rebass";
 import { clearSongDeleteState, deleteSongRequest } from "../Actions/deleteSongAction";
 import { useEffect, useState } from "react";
 import { StyledBox } from "./StyledComponents/StyledBox";
-import { StyledHeading, StyledHeading3 } from "./StyledComponents/StyledText";
+import { StyledHeading, StyledHeading3, StyledP } from "./StyledComponents/StyledText";
 
 function DeleteAlert({song,onClose}){
     const dispatch = useDispatch();
@@ -27,10 +27,10 @@ useEffect(() => {
 },[deleteSongSuccess]);
     return (
 <StyledBox>
-<Flex justifyContent={'center'}> <StyledHeading>Do You Want To Delete {song.title} by {song.artist}?</StyledHeading></Flex>
+<Flex justifyContent={'center'} textAlign={'center'}> <StyledHeading3>Do You Want To Delete {song.title} by {song.artist}?</StyledHeading3></Flex>
     <Flex flexDirection = 'row' justifyContent='space-between'>
-        <SecondaryButton onClick={onClose}>close</SecondaryButton>
-        <SecondaryButton onClick={(e) => handleDelete(e)}>Delete</SecondaryButton>
+        <SecondaryButton onClick={onClose}><StyledP>close</StyledP></SecondaryButton>
+        <SecondaryButton onClick={(e) => handleDelete(e)}><StyledP>Delete</StyledP></SecondaryButton>
     </Flex>
 
 

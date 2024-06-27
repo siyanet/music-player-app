@@ -27,7 +27,7 @@ function LogoutConfirmation({onClose}){
     return(  
         <StyledBox> 
             <Flex flexDirection={'column'}>
-        <StyledHeading3>Are You Sure You Want To Logout?</StyledHeading3>
+            <Flex justifyContent={'center'} textAlign={'center'}><StyledHeading3>Are You Sure You Want To Logout?</StyledHeading3></Flex>
         <Flex flexDirection={'row'} justifyContent={'space-between'}>
             <SecondaryButton onClick={(e) => handleLogoutButton(e)}><StyledP>yes</StyledP></SecondaryButton>
             <SecondaryButton onClick={onClose}><StyledP>NO</StyledP></SecondaryButton>

@@ -54,8 +54,7 @@ class SongListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        print('Retrieving songs...')
-        return Song.objects.all()
+        return Song.objects.filter(user = self.request.user)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

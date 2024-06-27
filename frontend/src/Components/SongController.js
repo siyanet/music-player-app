@@ -5,12 +5,13 @@ import { useEffect, useRef, useState } from "react";
 import { faArrowLeft, faArrowRight, faChevronLeft, faPause, faPlay, faStepBackward, faStepForward } from "@fortawesome/free-solid-svg-icons";
 import { CustomSlider, StyledSlider } from "./StyledComponents/StyledSlider";
 import { StyledP } from "./StyledComponents/StyledText";
+import { Slider } from "theme-ui";
 
-function SongController({currentSong,audioRefs}){
+function SongController({currentSong,audioRefs,handlePlayPause,isPlaying}){
      const audioRef = audioRefs.current[currentSong.id];
     const [currentTime,setCurrentTime] = useState(0);
     const [duration,setDuration] = useState(0);
-    const [isPlaying,setIsPlaying] = useState(true);
+    //const [isPlaying,setIsPlaying] = useState(true);
     const isSeeking = useRef(false);
     const handleSeek = (seekTime) => {
         console.log("this is seek time", seekTime);
@@ -22,14 +23,14 @@ function SongController({currentSong,audioRefs}){
     };
     
    
-    const handlePlayPause = () => {
-        if (isPlaying) {
-            audioRef.current.pause();
-        } else {
-            audioRef.current.play();
-        }
-        setIsPlaying(!isPlaying);
-    };
+    // const handlePlayPause = () => {
+    //     if (isPlaying) {
+    //         audioRef.current.pause();
+    //     } else {
+    //         audioRef.current.play();
+    //     }
+    //     setIsPlaying(!isPlaying);
+    // };
     const formatTime = (time) => {
         const minutes = Math.floor(time / 60);
         const seconds = Math.floor(time % 60);
@@ -66,7 +67,7 @@ function SongController({currentSong,audioRefs}){
             <Flex flexDirection={'column'} width={'100%'}>
             <Flex flexDirection={'row'} width={'100%'} justifyContent={"center"}>
                 <SecondaryButton><StyledIcon icon={faStepBackward}/></SecondaryButton>
-                {isPlaying? <SecondaryButton onClick={handlePlayPause}><StyledIcon icon={faPause}/> </SecondaryButton>:<SecondaryButton onClick={handlePlayPause}><StyledIcon icon={faPlay}/></SecondaryButton>}
+                {isPlaying? <SecondaryButton onClick={ () => handlePlayPause(currentSong)}><StyledIcon icon={faPause}/> </SecondaryButton>:<SecondaryButton onClick={() =>handlePlayPause(currentSong)}><StyledIcon icon={faPlay}/></SecondaryButton>}
                 <SecondaryButton><StyledIcon icon={faStepForward}/></SecondaryButton>
             </Flex>
             <Flex flexDirection={'row'} justifyContent={"center"}>

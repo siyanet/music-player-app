@@ -14,16 +14,13 @@ const lightTheme = {
       body: 'Roboto Slab, serif',
       special: 'Lora, sans-serif',
     },
-    fontSizes: [15,21,32,40],
+    fontSizes: [15,21,30,40],
     fontWeights: {
       body: 300,
       heading: 500,
       bold: 400,
     },
-    lineHeights: {
-      body: 1.5,
-      heading: 1.25,
-    },
+    
     radii: {
       default: 7,
       circle: 99999,

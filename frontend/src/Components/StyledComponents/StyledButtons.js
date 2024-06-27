@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 export const PrimaryButton = styled.button`
 margin: ${props => `${props.theme.space[0]}px`};
-padding: 0px;
+padding: 5px;
 // padding: ${props => `${props.theme.space[0]}px`};
 font-family: ${props => props.theme.fonts.special};
 font-size: ${props => `${props.theme.fontSizes[2]}px`};
@@ -10,7 +10,7 @@ background-color: ${props => props.backgroundColor || props.theme.colors.primary
 border-radius: ${props => `${props.theme.radii.default}px`};
 cursor: pointer;
 width: 100%;
-text-align: left;
+text-align: center;
 margin: 2px;
 
 &:hover{

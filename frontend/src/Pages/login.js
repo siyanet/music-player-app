@@ -95,7 +95,7 @@ const changeMethod = () => {
 {/* {loginError && <StyledHeading>{loginError}</StyledHeading>}
             {registerError && <StyledHeading>{registerError}</StyledHeading>}
              */}
-             <Box marginTop={'150px'} position="fixed" width="100%"> <Flex flexDirection={'column'} justifyContent={'center'} alignItems={'center'} ><StyledHeading>Wellcome To</StyledHeading> 
+             <Box marginTop={'130px'} position="fixed" width="100%"> <Flex flexDirection={'column'} justifyContent={'center'} alignItems={'center'} ><StyledHeading>Wellcome To</StyledHeading> 
              <StyledHeading>My Music</StyledHeading>
              
              </Flex></Box>

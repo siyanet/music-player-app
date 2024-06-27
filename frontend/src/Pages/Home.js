@@ -141,8 +141,8 @@ const handlePlayPause = (song) => {
 
 
                    {playingSong && <Box height={'13%'} width={'100%'}>
-                    <Flex flexDirection={'column'} width={'100%'} height = {'100%'}alignItems={'center'}>
-                        <StyledHeading3 > {playingSong.title}</StyledHeading3>
+                    <Flex  white-space= {"pre-wrap"} flexDirection={'column'} width={'100%'} flexWrap="wrap" height = {'100%'}alignItems={'center'}>
+                        <StyledHeading3> {playingSong.title}</StyledHeading3>
                         <StyledP>{playingSong.artist}</StyledP>
                       
                      
@@ -166,14 +166,15 @@ const handlePlayPause = (song) => {
         
    
         {(songs && songs.length > 0 )|| (defaultSongs && defaultSongs.length > 0)? (
-            <Box height={'77%'}>      <Table>
+            <Box height={'77%'} overflowX={'hidden'} overflowY={'auto'}>      <Table>
             <TableHead>
              <TableHeader>Play</TableHeader>
              <TableHeader>Title</TableHeader>
              <TableHeader>Musican</TableHeader>
              {user && <TableHeader>Actions</TableHeader>}
             </TableHead>
-            <TableBody>
+            
+                <TableBody >
           { songs && songs.map((song) => {
                   // <EditForm onClose={closeEditForm} songId ={ song.id}></EditForm>
               // <EditForm onClose = {closeEditForm} songId = {song.id}></EditForm>
@@ -189,7 +190,7 @@ const handlePlayPause = (song) => {
           <TableCell> 
               <SecondaryButton onClick = {()=>  handlePlayPause(song)}>
               {currentSong === song.id? <StyledIcon icon={faPause}/>: <StyledIcon icon={faPlay}/>} </SecondaryButton>
-          <audio ref = {audioRefs.current[song.id]} src = {song.file}/>
+          <audio  ref = {audioRefs.current[song.id]} src = {song.file}/>
           </TableCell>
      
       <TableCell><StyledP>{song.title} </StyledP></TableCell>
@@ -223,6 +224,7 @@ const handlePlayPause = (song) => {
               
               
           </TableBody>
+            
       </Table>
       </Box>
         
@@ -237,7 +239,7 @@ const handlePlayPause = (song) => {
         {showLogout && <LogoutConfirmation onClose = {closedLogout}/>}
     
         {playingSong && 
-        <Box height={'13%'} width={'100%'} ><SongController currentSong={playingSong} audioRefs={audioRefs}/></Box> }
+        <Box height={'13%'} width={'100%'} ><SongController currentSong={playingSong} audioRefs={audioRefs} handlePlayPause = {handlePlayPause} isPlaying={currentSong}/></Box> }
         </Flex>
         </Box>
         </Flex>
